@@ -1,0 +1,193 @@
+.StampCalendar {
+  padding: 0 0 24px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top, rgba(255, 170, 118, 0.18), transparent 36%),
+    linear-gradient(180deg, #231711 0%, #16100d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 20px 44px rgba(28, 17, 12, 0.28);
+}
+
+.StampCalendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 24px 16px 16px;
+}
+
+.StampCalendar__header strong {
+  color: #fff;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.StampCalendar__navButton {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 30px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.StampCalendar__weekdays,
+.StampCalendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.StampCalendar__weekdays {
+  padding: 8px 12px 4px;
+}
+
+.StampCalendar__weekdays span {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 600;
+  padding: 4px 0;
+}
+
+.StampCalendar__cell {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.StampCalendar__grid {
+  padding: 0 12px;
+}
+
+.StampCalendar__cell:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.04);
+}
+
+.StampCalendar__cell--empty,
+.StampCalendar__cell--empty:hover {
+  background: transparent;
+  cursor: default;
+  transform: none;
+}
+
+.StampCalendar__cell.is-today {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.3);
+}
+
+.StampCalendar__cell.is-stamped {
+  background: rgba(255, 107, 107, 0.16);
+}
+
+.StampCalendar__date {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.StampCalendar__stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: rgba(255, 107, 107, 1);
+  font-size: 11px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  transform: rotate(-16deg);
+  margin-top: 9px;
+}
+
+.StampCalendar__footer {
+  padding: 24px 16px 0;
+}
+
+.StampCalendar__todayButton {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  color: #fff;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+@media (hover: hover) {
+  .StampCalendar__navButton:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .StampCalendar__todayButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(255, 107, 107, 0.34);
+    opacity: 0.98;
+  }
+}
+
+.StampCalendar__navButton:active,
+.StampCalendar__todayButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 380px) {
+  .StampCalendar__header strong {
+    font-size: 19px;
+  }
+
+  .StampCalendar__navButton {
+    width: 40px;
+    height: 40px;
+    font-size: 26px;
+  }
+
+  .StampCalendar__cell {
+    border-radius: 10px;
+  }
+
+  .StampCalendar__stamp {
+    min-width: 36px;
+    height: 22px;
+    padding: 0 7px;
+    margin-top: 8px;
+    font-size: 10px;
+  }
+}

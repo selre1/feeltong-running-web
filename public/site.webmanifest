@@ -1,0 +1,23 @@
+{
+  "name": "Feeltong Running",
+  "short_name": "Feeltong",
+  "description": "Mobile web running tracker with a Flutter app-shell expansion path.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff6eb",
+  "theme_color": "#ee5c25",
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

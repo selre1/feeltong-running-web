@@ -1,0 +1,77 @@
+.SkeletonNavigation {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: calc(74px + env(safe-area-inset-bottom));
+  background: rgba(15, 15, 26, 0.92);
+  border-top: 1px solid var(--theme-border);
+  backdrop-filter: blur(18px);
+  z-index: 20;
+}
+
+.SkeletonNavigation__inner {
+  width: min(430px, 100%);
+  height: 74px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px 0;
+}
+
+.SkeletonNavigation__menu {
+  width: 20%;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  color: var(--theme-text-faint);
+  border-radius: 16px;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease,
+    transform 120ms ease;
+}
+
+.SkeletonNavigation__menu.is-active {
+  color: var(--theme-accent);
+}
+
+@media (hover: hover) {
+  .SkeletonNavigation__menu:hover {
+    color: var(--theme-text);
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-1px);
+  }
+
+  .SkeletonNavigation__menu.is-active:hover {
+    color: var(--theme-accent);
+  }
+}
+
+.SkeletonNavigation__menu:active {
+  transform: translateY(0);
+}
+
+.SkeletonNavigation__icon {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+
+.SkeletonNavigation__icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.SkeletonNavigation__text {
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 700;
+}

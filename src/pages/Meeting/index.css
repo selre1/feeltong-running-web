@@ -1,0 +1,24 @@
+.MeetingPage {
+  display: grid;
+  gap: 18px;
+  padding: 28px 0 12px;
+}
+
+.MeetingPage__empty {
+  display: grid;
+  gap: 10px;
+  min-height: 220px;
+  align-content: center;
+}
+
+.MeetingPage__empty strong {
+  color: var(--theme-text);
+  font-size: 28px;
+  line-height: 32px;
+}
+
+.MeetingPage__empty p {
+  color: var(--theme-text-muted);
+  font-size: 15px;
+  line-height: 22px;
+}

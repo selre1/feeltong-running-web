@@ -1,0 +1,47 @@
+.PeriodTabs {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--theme-border);
+}
+
+.PeriodTabs__button {
+  min-width: 84px;
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--theme-text-faint);
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 700;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.PeriodTabs__button.is-active {
+  background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-2) 100%);
+  color: var(--theme-text);
+  box-shadow: 0 10px 24px rgba(255, 107, 107, 0.22);
+}
+
+@media (hover: hover) {
+  .PeriodTabs__button:hover:not(.is-active) {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--theme-text);
+  }
+
+  .PeriodTabs__button:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.PeriodTabs__button:active {
+  transform: translateY(0);
+}

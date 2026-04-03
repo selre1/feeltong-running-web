@@ -1,0 +1,5 @@
+.AdaptiveCenter {
+  position: relative;
+  width: calc(min(430px, 100%) - 40px);
+  margin: auto;
+}

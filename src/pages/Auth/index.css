@@ -1,0 +1,140 @@
+.AuthPage {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 18px;
+  background: radial-gradient(circle at 16% 6%, rgba(255, 107, 107, 0.2), transparent 46%),
+    radial-gradient(circle at 82% 8%, rgba(78, 205, 196, 0.16), transparent 44%),
+    radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 62%);
+}
+
+.AuthPage__card {
+  width: min(420px, 100%);
+  border-radius: 24px;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-bg-soft);
+  box-shadow: var(--theme-shadow);
+  backdrop-filter: blur(12px);
+  padding: 34px 24px 22px;
+}
+
+.AuthPage__logo {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.AuthPage__logoIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  color: #fff;
+  background: linear-gradient(140deg, var(--theme-accent), var(--theme-accent-2));
+  box-shadow: 0 8px 26px rgba(255, 107, 107, 0.4);
+}
+
+.AuthPage__logoText {
+  margin: 0 0 6px;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  background: linear-gradient(90deg, var(--theme-accent), var(--theme-accent-cool));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.AuthPage__desc {
+  color: var(--theme-text-faint);
+  font-size: 13px;
+}
+
+.AuthPage__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.AuthPage__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.AuthPage__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--theme-text-faint);
+}
+
+.AuthPage__input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--theme-border);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 14px 14px;
+  color: var(--theme-text);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.AuthPage__input::placeholder {
+  color: var(--theme-text-faint);
+}
+
+.AuthPage__input:focus {
+  border-color: rgba(255, 107, 107, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.18);
+}
+
+.AuthPage__error {
+  border: 1px solid rgba(255, 107, 107, 0.34);
+  border-radius: 10px;
+  background: rgba(255, 107, 107, 0.14);
+  color: #ff9b9b;
+  font-size: 12px;
+  padding: 10px 12px;
+}
+
+.AuthPage__submit {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 15px 16px;
+  margin-top: 4px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--theme-accent), var(--theme-accent-2));
+  box-shadow: 0 6px 24px rgba(255, 107, 107, 0.4);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+.AuthPage__submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(255, 107, 107, 0.45);
+}
+
+.AuthPage__submit:disabled {
+  opacity: 0.64;
+  transform: none;
+}
+
+.AuthPage__toggle {
+  width: 100%;
+  margin-top: 10px;
+  border: none;
+  background: transparent;
+  color: var(--theme-text-faint);
+  padding: 10px 8px;
+  font-size: 13px;
+  transition: color 0.18s ease;
+}
+
+.AuthPage__toggle:hover {
+  color: var(--theme-text-muted);
+}

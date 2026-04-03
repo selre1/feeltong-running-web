@@ -1,0 +1,70 @@
+.HomePage {
+  display: grid;
+  gap: 22px;
+  padding: 30px 0 12px;
+}
+
+.HomePage__section {
+  display: grid;
+  gap: 16px;
+}
+
+.HomePage__sectionTop {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.HomePage__sectionLabel {
+  margin-bottom: 6px;
+  color: var(--theme-accent);
+  font-size: 13px;
+  line-height: 15px;
+  font-weight: 700;
+}
+
+.HomePage__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.HomePage__statCard {
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.HomePage__statCard span {
+  color: var(--theme-text-faint);
+  font-size: 13px;
+  line-height: 15px;
+  font-weight: 700;
+}
+
+.HomePage__statCard strong {
+  color: var(--theme-text);
+  font-size: 26px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.HomePage__statCard--accent {
+  background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-2) 100%);
+}
+
+.HomePage__statCard--accent span,
+.HomePage__statCard--accent strong {
+  color: #fff;
+}
+
+
+@media (max-width: 420px) {
+  .HomePage__sectionTop {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+ 

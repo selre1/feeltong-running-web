@@ -1,0 +1,240 @@
+﻿.RunningPage {
+  display: grid;
+  gap: 14px;
+  padding: 24px 0 12px;
+}
+
+.RunningPage--active {
+  gap: 12px;
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.RunningPage__mapCard {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.RunningPage--active .RunningPage__mapCard {
+  min-height: 0;
+}
+
+.RunningPage--active .RunningPage__mapCard .RouteMap {
+  height: 100%;
+}
+
+.RunningPage--active .RunningPage__mapCard .RouteMap__viewport {
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+
+.RunningPage__notice {
+  color: var(--theme-text-muted);
+  font-size: 13px;
+  line-height: 18px;
+  padding: 12px 16px 16px;
+}
+
+.RunningPage__notice--panel {
+  padding: 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.RunningPage__panel {
+  display: grid;
+  gap: 20px;
+}
+
+.RunningPage__intro span,
+.RunningPage__summaryHero span,
+.RunningPage__summaryItem span,
+.RunningPage__heroStat span,
+.RunningPage__metaStat span {
+  color: var(--theme-accent);
+  font-size: 13px;
+  line-height: 15px;
+  font-weight: 700;
+}
+
+.RunningPage__intro strong,
+.RunningPage__summaryHero strong,
+.RunningPage__summaryItem strong,
+.RunningPage__heroStat strong,
+.RunningPage__metaStat strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--theme-text);
+}
+
+.RunningPage__intro strong,
+.RunningPage__summaryHero strong {
+  font-size: 28px;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.RunningPage__intro p {
+  margin-top: 10px;
+  color: var(--theme-text-muted);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.RunningPage__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.RunningPage__actions--inline {
+  flex-wrap: nowrap;
+}
+
+.RunningPage__button {
+  flex: 1;
+  min-height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 700;
+}
+
+.RunningPage__button--primary {
+  color: #fff;
+}
+
+.RunningPage__stats {
+  display: grid;
+  gap: 12px;
+  padding: 16px 0 0;
+  overflow: hidden;
+}
+
+.RunningPage__heroStats,
+.RunningPage__summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+}
+
+.RunningPage__heroStat,
+.RunningPage__metaStat,
+.RunningPage__summaryItem {
+  padding: 16px 18px;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+}
+
+.RunningPage__heroStat {
+  min-height: 102px;
+}
+
+.RunningPage__heroStat + .RunningPage__heroStat {
+  border-left: 1px solid var(--theme-border);
+}
+
+.RunningPage__heroStat strong {
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.RunningPage__metaStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--theme-border);
+  border-bottom: 1px solid var(--theme-border);
+}
+
+.RunningPage__metaStat {
+  min-height: 72px;
+  text-align: center;
+}
+
+.RunningPage__metaStat + .RunningPage__metaStat {
+  border-left: 1px solid var(--theme-border);
+}
+
+.RunningPage__metaStat strong {
+  font-size: 16px;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+.RunningPage__heroStat span,
+.RunningPage__metaStat span {
+  color: var(--theme-accent);
+}
+
+.RunningPage__controls {
+  display: flex;
+  gap: 10px;
+  padding: 0 18px 18px;
+}
+
+.RunningPage__summaryItem {
+  min-height: 120px;
+}
+
+@media (max-width: 420px) {
+  .RunningPage {
+    padding-top: 20px;
+  }
+
+  .RunningPage--active {
+    min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
+  }
+
+  .RunningPage__heroStats,
+  .RunningPage__summaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .RunningPage__metaStats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .RunningPage__heroStat strong {
+    font-size: 24px;
+  }
+
+  .RunningPage__metaStat {
+    min-height: 68px;
+    padding: 12px 10px 10px;
+  }
+
+  .RunningPage__metaStat strong {
+    font-size: 14px;
+  }
+
+  .RunningPage__stats {
+    padding-top: 14px;
+  }
+
+  .RunningPage__controls {
+    gap: 8px;
+  }
+
+  .RunningPage__actions--summary {
+    gap: 8px;
+  }
+
+  .RunningPage__actions--summary .RunningPage__button {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 16px;
+    padding-inline: 10px;
+  }
+}

@@ -1,0 +1,120 @@
+@font-face {
+  font-family: 'NanumSquare';
+  src: url('/fonts/NanumSquare_acL.ttf') format('truetype');
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'NanumSquare';
+  src: url('/fonts/NanumSquare_acR.ttf') format('truetype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'NanumSquare';
+  src: url('/fonts/NanumSquare_acB.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'NanumSquare';
+  src: url('/fonts/NanumSquare_acEB.ttf') format('truetype');
+  font-weight: 700;
+}
+
+:root {
+  font-family: 'NanumSquare', 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.5;
+  font-weight: 300;
+  color: #fff;
+  --theme-bg: #0f0f1a;
+  --theme-bg-elevated: #1a1a2e;
+  --theme-bg-soft: rgba(255, 255, 255, 0.04);
+  --theme-bg-soft-strong: rgba(255, 255, 255, 0.08);
+  --theme-border: rgba(255, 255, 255, 0.08);
+  --theme-text: #fff;
+  --theme-text-muted: rgba(255, 255, 255, 0.72);
+  --theme-text-faint: rgba(255, 255, 255, 0.45);
+  --theme-accent: #ff6b6b;
+  --theme-accent-2: #ff8e53;
+  --theme-accent-cool: #3392ff;
+  --theme-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+  background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 62%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 62%);
+  color: var(--theme-text);
+  touch-action: pan-y;
+}
+
+#root {
+  position: relative;
+}
+
+body::-webkit-scrollbar,
+div::-webkit-scrollbar {
+  display: none;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: var(--theme-text);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--theme-accent-cool);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

@@ -1,0 +1,11 @@
+.SkeletonContainer {
+  width: 100%;
+  min-height: calc(100% - env(safe-area-inset-bottom));
+  position: relative;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.SkeletonNavSpacer {
+  height: 102px;
+}
