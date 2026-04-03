@@ -1,5 +1,5 @@
 const CACHE_NAME = 'feeltong-running-shell-v1'
-const APP_SHELL = ['/', '/index.html', '/site.webmanifest', '/favicon.svg', '/pwa-icon.svg', '/pwa-maskable.svg']
+const APP_SHELL = ['/', '/index.html', '/manifest.json', '/favicon.svg', '/pwa-icon.svg', '/pwa-maskable.svg']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)))
