@@ -19,10 +19,15 @@ export default function AuthPage() {
       const { data, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            nickname: nickname,
+          },
+        }
       })
 
       if (authError) {
-        setError(authError.message)
+        authError.status === 422 ? setError('이미 사용 중인 이메일입니다.') : setError('회원가입에 실패했습니다. 다시 시도해주세요.')
         setLoading(false)
         return
       }
@@ -51,7 +56,7 @@ export default function AuthPage() {
       })
 
       if (authError) {
-        setError(authError.message)
+        authError.status === 400 ? setError('이메일 또는 비밀번호가 올바르지 않습니다.') : setError('로그인에 실패했습니다. 다시 시도해주세요.')
         setLoading(false)
         return
       }
@@ -126,7 +131,7 @@ export default function AuthPage() {
           {error ? <p className="AuthPage__error">{error}</p> : null}
 
           <button className="AuthPage__submit" disabled={loading} type="submit">
-            {loading ? 'Processing...' : isSignUp ? '등록' : '로그인'}
+            {loading ? '뛴다...' : isSignUp ? '등록' : '로그인'}
           </button>
         </form>
 
