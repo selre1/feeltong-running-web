@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { RunRecord } from '../types/run'
-import { useApiClient } from './useApiClient'
+import useApiClient from './useApi'
 
 interface ApiRunRecord {
   _id?: string

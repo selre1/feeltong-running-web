@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useApiClient } from './useApiClient'
+import useApiClient from '@/hooks/useApi'
 
 export interface SessionUser {
   email: string
