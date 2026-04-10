@@ -77,6 +77,13 @@
   line-height: 30px;
 }
 
+.MyPage__email {
+  margin-top: 6px;
+  color: var(--theme-text-faint);
+  font-size: 13px;
+  line-height: 18px;
+}
+
 .MyPage__bio {
   margin-top: 8px;
   color: var(--theme-text-muted);

@@ -4,8 +4,10 @@ import Header from '../../components/Header'
 import './index.css'
 
 interface MyPageProps {
+  email: string
+  nickname: string
   onBack: () => void
-  onLogout: () => void
+  onLogout: () => void | Promise<void>
   recordCount: number
 }
 
@@ -16,7 +18,7 @@ const SETTINGS = [
   ['개인정보', '프로필 공개 범위와 데이터 보관 정책을 확인합니다.'],
 ]
 
-export default function MyPage({ onBack, onLogout, recordCount }: MyPageProps) {
+export default function MyPage({ email, nickname, onBack, onLogout, recordCount }: MyPageProps) {
   return (
     <AdaptiveDiv className="MyPage" type="center">
       <div className="MyPage__header">
@@ -35,10 +37,9 @@ export default function MyPage({ onBack, onLogout, recordCount }: MyPageProps) {
         <div className="MyPage__avatar">FR</div>
         <div>
           <span className="MyPage__label">사용자 프로필</span>
-          <strong className="MyPage__name">Feeltong Runner</strong>
-          <p className="MyPage__bio">
-            총 러닝 기록 {recordCount}개를 쌓은 사용자 프로필입니다.
-          </p>
+          <strong className="MyPage__name">{nickname}</strong>
+          <p className="MyPage__email">{email}</p>
+          <p className="MyPage__bio">총 러닝 기록 {recordCount}개를 쌓은 사용자 프로필입니다.</p>
         </div>
       </AdaptiveCard>
 

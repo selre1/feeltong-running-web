@@ -31,6 +31,7 @@
   background: transparent;
   color: var(--theme-text-faint);
   border-radius: 16px;
+  text-decoration: none;
   transition:
     color 120ms ease,
     background-color 120ms ease,
