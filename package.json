@@ -1,16 +1,13 @@
 {
   "name": "feeltong-running-web",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "start:prod": "vite --mode prod",
-    "start:dev": "vite --mode dev",
-    "build:prod": "tsc --noEmit && vite build --mode prod",
-    "build:dev": "tsc --noEmit && vite build --mode dev",
-    "lint": "eslint .",
-    "preview:prod": "vite preview --mode prod",
-    "preview:dev": "vite preview --mode dev"
+    "start": "vite",
+    "build": "tsc && vite build",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@types/leaflet": "^1.9.21",
