@@ -13,9 +13,12 @@
     "preview:dev": "vite preview --mode dev"
   },
   "dependencies": {
+    "@types/leaflet": "^1.9.21",
     "axios": "^1.13.1",
+    "leaflet": "^1.9.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.9.5"
   },
   "devDependencies": {

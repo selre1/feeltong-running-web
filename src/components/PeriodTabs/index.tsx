@@ -8,8 +8,8 @@ interface PeriodTabsProps {
 }
 
 const PERIODS: Array<{ label: string; value: PeriodKey }> = [
-  { label: '이번 주', value: 'week' },
-  { label: '이번 달', value: 'month' },
+  { label: '이번주', value: 'week' },
+  { label: '이번달', value: 'month' },
   { label: '전체', value: 'all' },
 ]
 
@@ -29,3 +29,4 @@ export default function PeriodTabs({ onChange, value }: PeriodTabsProps) {
     </div>
   )
 }
+

@@ -114,8 +114,8 @@
 .PageHeader {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  align-items: center;
-  row-gap: 10px;
+  align-items: end;
+  row-gap: 8px;
 }
 
 .PageHeader__eyebrow {
@@ -129,17 +129,19 @@
 
 .PageHeader__title {
   grid-column: 1;
-  color: var(--theme-text);
-  font-size: 32px;
-  line-height: 1.05;
-  letter-spacing: -0.05em;
+  color: var(--ui-color-text-primary);
+  font-size: var(--ui-text-title);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 800;
 }
 
 .PageHeader__subtitle {
   grid-column: 1 / -1;
-  color: var(--theme-text-muted);
-  font-size: 15px;
-  line-height: 22px;
+  color: var(--ui-color-text-tertiary);
+  font-size: var(--ui-text-caption);
+  line-height: 1.4;
+  font-weight: 600;
 }
 
 @media (max-width: 420px) {

@@ -1,11 +1,10 @@
 .AdaptiveCard {
   margin: 0;
-  padding: 20px;
-  border-radius: 28px;
-  border: 1px solid var(--theme-border);
-  background: var(--theme-bg-soft);
-  box-shadow: var(--theme-shadow);
-  backdrop-filter: blur(12px);
+  padding: var(--ui-card-padding);
+  border-radius: var(--ui-radius-card);
+  border: var(--ui-border-muted);
+  background: var(--ui-surface-card);
+  box-shadow: none;
   overflow: hidden;
   position: relative;
 }

@@ -1,7 +1,7 @@
 .MyPage {
   display: grid;
-  gap: 18px;
-  padding: 28px 0 12px;
+  gap: var(--ui-page-gap);
+  padding: var(--ui-page-padding-top) 0 12px;
   position: relative;
 }
 
@@ -9,24 +9,28 @@
   position: relative;
 }
 
+.MyPage .AdaptiveCard {
+  border-radius: var(--ui-radius-card);
+  border: var(--ui-border-muted);
+  background: var(--ui-surface-card);
+  box-shadow: none;
+  padding: var(--ui-card-padding);
+}
+
 .MyPage__logout {
   position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 74px;
-  height: 42px;
-  padding: 0 12px;
-  border: 1px solid var(--theme-border);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.07);
-  color: var(--theme-text);
-  font-size: 13px;
+  top: 16px;
+  right: 16px;
+  min-width: 82px;
+  height: 40px;
+  padding: 0 14px;
+  border: var(--ui-border-muted);
+  border-radius: var(--ui-radius-control);
+  background: var(--ui-surface-control);
+  color: var(--ui-color-text-primary);
+  font-size: var(--ui-text-body);
   font-weight: 700;
-  transition:
-    transform 120ms ease,
-    background-color 120ms ease,
-    box-shadow 120ms ease,
-    border-color 120ms ease;
+  transition: background-color 120ms ease, border-color 120ms ease;
 }
 
 @media (hover: hover) {
@@ -43,10 +47,12 @@
 }
 
 .MyPage__profile {
+  position: relative;
   display: grid;
   grid-template-columns: 84px minmax(0, 1fr);
-  gap: 16px;
+  gap: 14px;
   align-items: center;
+  padding-top: 64px;
 }
 
 .MyPage__avatar {
@@ -64,31 +70,31 @@
 
 .MyPage__label {
   color: var(--theme-accent);
-  font-size: 13px;
-  line-height: 15px;
+  font-size: 0.78rem;
+  line-height: 1.2;
   font-weight: 700;
 }
 
 .MyPage__name {
   display: block;
-  margin-top: 8px;
-  color: var(--theme-text);
-  font-size: 28px;
-  line-height: 30px;
+  margin-top: 6px;
+  color: var(--ui-color-text-primary);
+  font-size: var(--ui-text-title);
+  line-height: 1.2;
 }
 
 .MyPage__email {
-  margin-top: 6px;
-  color: var(--theme-text-faint);
-  font-size: 13px;
-  line-height: 18px;
+  margin-top: 4px;
+  color: var(--ui-color-text-tertiary);
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .MyPage__bio {
-  margin-top: 8px;
-  color: var(--theme-text-muted);
-  font-size: 15px;
-  line-height: 22px;
+  margin-top: 6px;
+  color: var(--ui-color-text-secondary);
+  font-size: var(--ui-text-body);
+  line-height: 1.5;
 }
 
 .MyPage__settings {
@@ -97,16 +103,16 @@
 }
 
 .MyPage__setting strong {
-  color: var(--theme-text);
-  font-size: 18px;
-  line-height: 22px;
+  color: var(--ui-color-text-primary);
+  font-size: var(--ui-text-body);
+  line-height: 1.3;
 }
 
 .MyPage__setting p {
-  margin-top: 8px;
-  color: var(--theme-text-muted);
-  font-size: 14px;
-  line-height: 20px;
+  margin-top: 6px;
+  color: var(--ui-color-text-secondary);
+  font-size: var(--ui-text-body);
+  line-height: 1.5;
 }
 
 @media (max-width: 420px) {

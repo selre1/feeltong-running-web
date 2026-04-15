@@ -6,6 +6,7 @@ import PeriodTabs, { type PeriodKey } from '../../components/PeriodTabs'
 import StampCalendar from '../../components/StampCalendar'
 import type { RunRecord } from '../../types/run'
 import { formatDistance, formatDuration, formatNumber } from '../../utils/format'
+import { getRecordsByPeriod, summarizeRecords } from '../../utils/stats'
 import './index.css'
 
 interface HomePageProps {
@@ -13,25 +14,6 @@ interface HomePageProps {
   onOpenRunning: () => void
   records: RunRecord[]
   todayRecordCount: number
-}
-
-const getPeriodStart = (period: PeriodKey) => {
-  const now = new Date()
-  const current = new Date(now)
-  current.setHours(0, 0, 0, 0)
-
-  if (period === 'week') {
-    const dayOffset = current.getDay()
-    current.setDate(current.getDate() - dayOffset)
-    return current.getTime()
-  }
-
-  if (period === 'month') {
-    current.setDate(1)
-    return current.getTime()
-  }
-
-  return 0
 }
 
 export default function HomePage({
@@ -42,23 +24,8 @@ export default function HomePage({
 }: HomePageProps) {
   const [period, setPeriod] = useState<PeriodKey>('week')
 
-  const filteredRecords = useMemo(() => {
-    const threshold = getPeriodStart(period)
-    return records.filter((record) => record.startedAt >= threshold)
-  }, [period, records])
-
-  const summary = useMemo(
-    () =>
-      filteredRecords.reduce(
-        (accumulator, record) => ({
-          count: accumulator.count + 1,
-          distanceMeters: accumulator.distanceMeters + record.distanceMeters,
-          durationMs: accumulator.durationMs + record.durationMs,
-        }),
-        { count: 0, distanceMeters: 0, durationMs: 0 },
-      ),
-    [filteredRecords],
-  )
+  const filteredRecords = useMemo(() => getRecordsByPeriod(records, period), [period, records])
+  const summary = useMemo(() => summarizeRecords(filteredRecords), [filteredRecords])
 
   return (
     <>

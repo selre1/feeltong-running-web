@@ -1,14 +1,10 @@
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
-import type { RunDraft, RunRecord } from '../types/run'
-import {
-  getAveragePaceSeconds,
-  getDistanceMeters,
-  getRouteDistanceMeters,
-  toGeoPoint,
-} from '../utils/geo'
+import type { RunDraft, RunRecord } from '../../types/run'
+import { getAveragePaceSeconds, getRouteDistanceMeters, toGeoPoint } from '../../utils/geo'
 
 const RECORDS_STORAGE_KEY = 'feeltong-running-records'
 const DRAFT_STORAGE_KEY = 'feeltong-running-draft'
+const ROUTE_SAMPLE_INTERVAL_MS = 30_000
 
 const createEmptyDraft = (): RunDraft => ({
   status: 'idle',
@@ -46,23 +42,17 @@ const getElapsedMs = (draft: RunDraft, now: number) => {
 
 const shouldAppendPoint = (route: RunDraft['route'], point: RunDraft['route'][number]) => {
   const previous = route.at(-1)
-
   if (!previous) {
     return true
   }
-
-  const distance = getDistanceMeters(previous, point)
-  const timeDelta = point.timestamp - previous.timestamp
-  return distance >= 6 || timeDelta >= 10_000
+  return point.timestamp - previous.timestamp >= ROUTE_SAMPLE_INTERVAL_MS
 }
 
-export const useRunTracking = () => {
+export default function useRunTracking() {
   const [draft, setDraft] = useState<RunDraft>(() => parseStoredJson(DRAFT_STORAGE_KEY, createEmptyDraft()))
   const [records, setRecords] = useState<RunRecord[]>(() => parseStoredJson(RECORDS_STORAGE_KEY, []))
   const [now, setNow] = useState(() => Date.now())
-  const [notice, setNotice] = useState(
-    '모바일웹에서는 포그라운드 GPS를 추적합니다. 백그라운드 GPS는 Flutter 앱쉘에서 확장합니다.',
-  )
+  const [notice, setNotice] = useState('GPS 권한을 허용하면 현재 위치를 표시합니다.')
   const watchIdRef = useRef<number | null>(null)
 
   const elapsedMs = getElapsedMs(draft, now)
@@ -81,24 +71,27 @@ export const useRunTracking = () => {
   }, [draft])
 
   useEffect(() => {
+    if (draft.status === 'idle' && draft.currentPosition) {
+      setNotice('GPS 허용됨: 현재 위치를 확인했습니다.')
+    }
+  }, [draft.status, draft.currentPosition])
+
+  useEffect(() => {
     if (draft.status !== 'running') {
       return
     }
-
-    const timer = window.setInterval(() => {
-      setNow(Date.now())
-    }, 1000)
-
-    return () => {
-      window.clearInterval(timer)
-    }
+    const timer = window.setInterval(() => setNow(Date.now()), 1000)
+    return () => window.clearInterval(timer)
   }, [draft.status])
 
   const handlePosition = useEffectEvent((position: GeolocationPosition) => {
     const point = toGeoPoint(position)
 
     setDraft((previous) => {
-      const route = shouldAppendPoint(previous.route, point) ? [...previous.route, point] : previous.route
+      const route =
+        previous.status === 'running' && shouldAppendPoint(previous.route, point)
+          ? [...previous.route, point]
+          : previous.route
 
       return {
         ...previous,
@@ -107,19 +100,37 @@ export const useRunTracking = () => {
       }
     })
 
-    setNotice(`GPS 수신 중입니다. 최신 위치 ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`)
+    if (draft.status === 'running') {
+      setNotice(`GPS 수신 중입니다. 최신 위치 ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`)
+      return
+    }
+
+    setNotice('GPS 허용됨: 현재 위치를 확인했습니다.')
   })
 
   const handleGeolocationError = useEffectEvent((error: GeolocationPositionError) => {
     const fallback =
       error.code === error.PERMISSION_DENIED
-        ? '위치 권한이 거부되었습니다. 모바일 브라우저 설정에서 위치 권한을 허용해 주세요.'
-        : 'GPS를 안정적으로 읽지 못했습니다. 실외 또는 실제 기기에서 다시 확인해 주세요.'
-
+        ? 'GPS 권한이 거부되었습니다. 브라우저 설정에서 위치 권한을 허용해 주세요.'
+        : 'GPS 수신이 불안정합니다. 실외 또는 실제 기기에서 다시 확인해 주세요.'
     setNotice(fallback)
   })
 
   useEffect(() => {
+    if (draft.status === 'idle' && !draft.currentPosition) {
+      if (!('geolocation' in navigator)) {
+        setNotice('이 브라우저는 Geolocation API를 지원하지 않습니다.')
+        return
+      }
+
+      navigator.geolocation.getCurrentPosition(handlePosition, handleGeolocationError, {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 12_000,
+      })
+      return
+    }
+
     if (draft.status !== 'running') {
       if (watchIdRef.current !== null) {
         navigator.geolocation.clearWatch(watchIdRef.current)
@@ -151,12 +162,12 @@ export const useRunTracking = () => {
         watchIdRef.current = null
       }
     }
-  }, [draft.status, handleGeolocationError, handlePosition])
+  }, [draft.status, draft.currentPosition, handleGeolocationError, handlePosition])
 
   const startRun = (onAfterStart?: () => void) => {
     const startedAt = Date.now()
     setNow(startedAt)
-    setNotice('러닝을 시작했습니다. 위치 신호를 받는 중입니다.')
+    setNotice('러닝을 시작했습니다. GPS 신호를 수신 중입니다.')
     setDraft({
       status: 'running',
       startedAt,
@@ -186,10 +197,9 @@ export const useRunTracking = () => {
     setDraft((previous) => ({
       ...previous,
       status: 'running',
-      accumulatedPausedMs:
-        previous.pausedStartedAt
-          ? previous.accumulatedPausedMs + (resumedAt - previous.pausedStartedAt)
-          : previous.accumulatedPausedMs,
+      accumulatedPausedMs: previous.pausedStartedAt
+        ? previous.accumulatedPausedMs + (resumedAt - previous.pausedStartedAt)
+        : previous.accumulatedPausedMs,
       pausedStartedAt: null,
     }))
     onAfterResume?.()
@@ -218,9 +228,7 @@ export const useRunTracking = () => {
     setRecords((previous) => [record, ...previous].slice(0, 100))
     setDraft(createEmptyDraft())
     setNow(endedAt)
-    setNotice(
-      '러닝 기록을 저장했습니다. 동일한 데이터 모델을 기준으로 Flutter 앱쉘과 공통 API로 확장할 수 있습니다.',
-    )
+    setNotice('러닝이 종료되었습니다. 저장 버튼으로 기록을 보관하세요.')
     onAfterFinish?.(record)
   }
 
@@ -237,3 +245,4 @@ export const useRunTracking = () => {
     startRun,
   }
 }
+

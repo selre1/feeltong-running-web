@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { RunRecord } from '../types/run'
-import useApiClient from './useApi'
+import type { GeoPoint, RunRecord } from '../../types/run'
+import useApiClient from '../useApi'
 
 interface ApiRunRecord {
   _id?: string
   distanceMeters: number
-  elapsedTime: number
+  durationSeconds: number
+  paceSecondsPerKm: number
   endedAt: string
+  route: Array<GeoPoint>
   startedAt: string
   userId: string
 }
@@ -15,13 +17,13 @@ const toRunRecord = (record: ApiRunRecord): RunRecord => ({
   id: record._id ?? `${record.userId}-${record.startedAt}`,
   startedAt: new Date(record.startedAt).getTime(),
   endedAt: new Date(record.endedAt).getTime(),
-  durationMs: record.elapsedTime * 1000,
+  durationMs: record.durationSeconds * 1000,
   distanceMeters: record.distanceMeters,
-  averagePaceSeconds: null,
-  route: [],
+  averagePaceSeconds: record.paceSecondsPerKm,
+  route: record.route,
 })
 
-export const useRunRecords = (enabled: boolean) => {
+export default function useRunRecords(enabled: boolean) {
   const apiClient = useApiClient()
   const [records, setRecords] = useState<RunRecord[]>([])
 
@@ -48,3 +50,4 @@ export const useRunRecords = (enabled: boolean) => {
     refetch,
   }
 }
+

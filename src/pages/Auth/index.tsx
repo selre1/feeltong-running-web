@@ -42,14 +42,14 @@ export default function AuthPage({ error, loading, onLogin, onSignUp }: AuthPage
           {isSignUp ? (
             <div className="AuthPage__field">
               <label className="AuthPage__label" htmlFor="auth-nickname">
-                Nickname
+                닉네임
               </label>
               <input
                 autoComplete="username"
                 className="AuthPage__input"
                 id="auth-nickname"
                 onChange={(event) => setNickname(event.target.value)}
-                placeholder="Enter your nickname"
+                placeholder="닉네임을 입력하세요."
                 required
                 type="text"
                 value={nickname}

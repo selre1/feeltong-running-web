@@ -1,97 +1,145 @@
-﻿.RunningPage {
+.RunningPage {
   display: grid;
-  gap: 14px;
-  padding: 24px 0 12px;
+  gap: var(--ui-page-gap);
+  padding: var(--ui-page-padding-top) 0 0;
+}
+
+.RunningPage .AdaptiveCard,
+.RunningPage .RouteMap__viewport {
+  border-radius: 0;
 }
 
 .RunningPage--active {
-  gap: 12px;
-  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.RunningPage--ready,
+.RunningPage--summary {
+  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
+}
+
+.RunningPage--ready {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.RunningPage--summary {
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 .RunningPage__mapCard {
   display: grid;
-  gap: 0;
   padding: 0;
   overflow: hidden;
-}
-
-.RunningPage--active .RunningPage__mapCard {
   min-height: 0;
+  position: relative;
 }
 
-.RunningPage--active .RunningPage__mapCard .RouteMap {
-  height: 100%;
+.RunningPage--ready .RunningPage__mapCard {
+  position: relative;
 }
 
-.RunningPage--active .RunningPage__mapCard .RouteMap__viewport {
+.RunningPage__mapCard .RouteMap,
+.RunningPage__mapCard .RouteMap__viewport {
+  height: 320px;
+  min-height: 320px;
+}
+
+.RunningPage--active .RunningPage__mapCard .RouteMap,
+.RunningPage--active .RunningPage__mapCard .RouteMap__viewport,
+.RunningPage--ready .RunningPage__mapCard .RouteMap,
+.RunningPage--ready .RunningPage__mapCard .RouteMap__viewport,
+.RunningPage--summary .RunningPage__mapCard .RouteMap,
+.RunningPage--summary .RunningPage__mapCard .RouteMap__viewport {
   height: 100%;
   min-height: 0;
-  aspect-ratio: auto;
-  border-radius: 0;
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
 }
 
 .RunningPage__notice {
-  color: var(--theme-text-muted);
-  font-size: 13px;
-  line-height: 18px;
-  padding: 12px 16px 16px;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 1200;
+  color: var(--ui-color-text-tertiary);
+  font-size: var(--ui-text-caption);
+  line-height: 1.4;
+  padding: 8px 10px;
+  border-radius: var(--ui-radius-control);
+  background: rgba(8, 12, 20, 0.62);
+  border: var(--ui-border-soft);
+  backdrop-filter: blur(8px);
 }
 
 .RunningPage__notice--panel {
-  padding: 0;
+  position: static;
+  left: auto;
+  right: auto;
+  top: auto;
+  z-index: auto;
+  padding: 8px 12px 0;
   text-align: center;
-  font-size: 12px;
-  line-height: 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  color: var(--ui-color-danger);
 }
 
-.RunningPage__panel {
+.RunningPage__dock {
   display: grid;
-  gap: 20px;
+  gap: 12px;
+  padding: var(--ui-card-padding);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1201;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
 }
 
 .RunningPage__intro span,
-.RunningPage__summaryHero span,
 .RunningPage__summaryItem span,
 .RunningPage__heroStat span,
 .RunningPage__metaStat span {
-  color: var(--theme-accent);
-  font-size: 13px;
-  line-height: 15px;
-  font-weight: 700;
+  color: var(--ui-color-text-tertiary);
+  font-size: var(--ui-text-caption);
+  line-height: 1.2;
+  font-weight: 600;
 }
 
 .RunningPage__intro strong,
-.RunningPage__summaryHero strong,
 .RunningPage__summaryItem strong,
 .RunningPage__heroStat strong,
 .RunningPage__metaStat strong {
   display: block;
-  margin-top: 8px;
-  color: var(--theme-text);
+  margin-top: 6px;
+  color: var(--ui-color-text-primary);
+  font-weight: 700;
 }
 
-.RunningPage__intro strong,
-.RunningPage__summaryHero strong {
-  font-size: 28px;
-  line-height: 1.08;
-  letter-spacing: -0.04em;
+.RunningPage__intro strong {
+  font-size: var(--ui-text-title);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 .RunningPage__intro p {
-  margin-top: 10px;
-  color: var(--theme-text-muted);
-  font-size: 15px;
-  line-height: 22px;
+  margin-top: 4px;
+  color: var(--ui-color-text-secondary);
+  font-size: var(--ui-text-body);
+  line-height: 1.5;
 }
 
 .RunningPage__actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+}
+
+.RunningPage__actions .RunningPage__button {
+  flex: 1;
 }
 
 .RunningPage__actions--inline {
@@ -99,142 +147,220 @@
 }
 
 .RunningPage__button {
-  flex: 1;
-  min-height: 52px;
   display: grid;
   place-items: center;
-  border-radius: 999px;
-  font-size: 16px;
-  line-height: 18px;
+  border-radius: var(--ui-radius-button);
+  font-size: var(--ui-text-body);
+  line-height: 1.1;
   font-weight: 700;
 }
 
 .RunningPage__button--primary {
-  color: #fff;
+  color: var(--ui-color-text-primary);
 }
 
 .RunningPage__stats {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1201;
   display: grid;
-  gap: 12px;
-  padding: 16px 0 0;
+  gap: 0;
+  padding: 0;
   overflow: hidden;
+  background: transparent;
 }
 
 .RunningPage__heroStats,
 .RunningPage__summaryGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
+}
+
+.RunningPage--summary .RunningPage__summaryGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .RunningPage__heroStat,
 .RunningPage__metaStat,
 .RunningPage__summaryItem {
-  padding: 16px 18px;
-  border-radius: 0;
+  padding: 12px 16px;
   border: 0;
   background: transparent;
 }
 
 .RunningPage__heroStat {
-  min-height: 102px;
+  min-height: 76px;
 }
 
 .RunningPage__heroStat + .RunningPage__heroStat {
-  border-left: 1px solid var(--theme-border);
+  border-left: 1px solid var(--ui-color-divider);
 }
 
 .RunningPage__heroStat strong {
-  font-size: 30px;
+  font-size: 2.1rem;
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.02em;
 }
 
 .RunningPage__metaStats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
-  border-top: 1px solid var(--theme-border);
-  border-bottom: 1px solid var(--theme-border);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--ui-color-divider);
+  border-bottom: 1px solid var(--ui-color-divider);
 }
 
 .RunningPage__metaStat {
-  min-height: 72px;
-  text-align: center;
+  min-height: 64px;
+
 }
 
 .RunningPage__metaStat + .RunningPage__metaStat {
-  border-left: 1px solid var(--theme-border);
+  border-left: 1px solid var(--ui-color-divider);
 }
 
 .RunningPage__metaStat strong {
-  font-size: 16px;
-  line-height: 1.18;
-  letter-spacing: -0.03em;
-}
-
-.RunningPage__heroStat span,
-.RunningPage__metaStat span {
-  color: var(--theme-accent);
+  font-size: var(--ui-text-body);
+  letter-spacing: -0.01em;
 }
 
 .RunningPage__controls {
   display: flex;
-  gap: 10px;
-  padding: 0 18px 18px;
+  align-items: center;
+  justify-content: stretch;
+  gap: 8px;
+  padding: 12px;
+}
+
+.RunningPage__controls--dock.is-running,
+.RunningPage__controls--dock.is-paused {
+  justify-content: stretch;
+}
+
+.RunningPage__button--pause,
+.RunningPage__button--end,
+.RunningPage__button--resume {
+  width: 100%;
+  height: 52px;
+  min-height: 52px;
+  flex: 1 1 0;
+  border-radius: var(--ui-radius-button);
+  font-size: var(--ui-text-body);
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+
+.RunningPage__button--pause,
+.RunningPage__button--end {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  box-shadow: var(--ui-button-shadow);
+  border: none;
+  color: var(--ui-color-text-primary);
+}
+
+.RunningPage__button--resume {
+  background: var(--ui-surface-control-muted);
+  border: var(--ui-border-soft);
+  color: var(--ui-color-text-primary);
+  box-shadow: none;
+}
+
+.RunningPage__summary {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1201;
+  display: grid;
+  gap: 0;
+  padding: 0;
+  background: transparent;
 }
 
 .RunningPage__summaryItem {
-  min-height: 120px;
+  min-height: 72px;
+}
+
+.RunningPage__summaryItem strong {
+  font-size: var(--ui-text-body);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.RunningPage__summary .RunningPage__summaryItem + .RunningPage__summaryItem {
+  border-left: 1px solid var(--ui-color-divider);
+}
+
+.RunningPage__actions--summary {
+  padding: 12px;
+  border-top: 1px solid var(--ui-color-divider);
+  gap: 8px;
+}
+
+.RunningPage__actions--summary .RunningPage__button {
+  min-height: 52px;
+  font-size: var(--ui-text-body);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.RunningPage__actions--summary .RunningPage__button:not(.RunningPage__button--primary) {
+  background: rgba(255, 255, 255, 0.06);
+  border: var(--ui-border-soft);
+  color: var(--ui-color-text-primary);
 }
 
 @media (max-width: 420px) {
   .RunningPage {
-    padding-top: 20px;
+    padding-top: 24px;
   }
 
-  .RunningPage--active {
-    min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
+  .RunningPage--ready,
+  .RunningPage--summary {
+    height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
   }
 
-  .RunningPage__heroStats,
-  .RunningPage__summaryGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .RunningPage__metaStats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .RunningPage__heroStat {
+    min-height: 68px;
+    padding: 10px 12px;
   }
 
   .RunningPage__heroStat strong {
-    font-size: 24px;
+    font-size: 1.8rem;
   }
 
   .RunningPage__metaStat {
-    min-height: 68px;
-    padding: 12px 10px 10px;
+    min-height: 62px;
+    padding: 10px 8px;
   }
 
   .RunningPage__metaStat strong {
-    font-size: 14px;
+    font-size: 0.92rem;
   }
 
-  .RunningPage__stats {
-    padding-top: 14px;
+  .RunningPage__button--pause,
+  .RunningPage__button--end,
+  .RunningPage__button--resume {
+    height: 50px;
+    min-height: 50px;
+    font-size: 0.95rem;
   }
 
-  .RunningPage__controls {
-    gap: 8px;
+  .RunningPage__summaryItem {
+    min-height: 64px;
+    padding: 10px 12px;
   }
 
-  .RunningPage__actions--summary {
-    gap: 8px;
+  .RunningPage__summaryItem strong {
+    font-size: 0.95rem;
   }
 
   .RunningPage__actions--summary .RunningPage__button {
-    min-width: 0;
-    font-size: 14px;
-    line-height: 16px;
-    padding-inline: 10px;
+    min-height: 50px;
+    font-size: 0.95rem;
   }
 }

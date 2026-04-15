@@ -1,67 +1,123 @@
-.RouteMap {
-  margin-top: 0;
-}
-
-.RouteMap__viewport {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1 / 1.02;
-  border-radius: 24px;
-  background: var(--theme-bg-elevated);
-  border: 1px solid var(--theme-border);
-}
-
-.RouteMap__tile,
-.RouteMap__overlay {
-  position: absolute;
-}
-
-.RouteMap__tile {
-  width: 256px;
-  height: 256px;
-  max-width: none;
-}
-
-.RouteMap__overlay {
-  inset: 0;
+﻿.RouteMap {
   width: 100%;
   height: 100%;
 }
 
-.RouteMap__frame {
-  fill: transparent;
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 12;
+.RouteMap__viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0c1526;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.RouteMap__line {
-  fill: none;
-  stroke: var(--theme-accent);
-  stroke-width: 8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.RouteMap__leaflet {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  touch-action: pinch-zoom;
 }
 
-.RouteMap__dot,
-.RouteMap__current {
-  fill: #1a1a2e;
-  stroke: var(--theme-accent);
-  stroke-width: 4;
+.RouteMap__viewport .leaflet-top.leaflet-left {
+  top: 12px;
+  left: 12px;
 }
 
-.RouteMap__current {
-  fill: var(--theme-accent);
+.RouteMap__viewport .leaflet-control-zoom {
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+}
+
+.RouteMap__viewport .leaflet-control-zoom a {
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  background: rgba(11, 18, 31, 0.92);
+  color: #f8fafc;
+  border: 0;
+  font-weight: 500;
+}
+
+.RouteMap__viewport .leaflet-control-zoom a:hover {
+  background: rgba(19, 30, 49, 0.96);
+  color: #ffffff;
+}
+
+.RouteMap__numberIcon {
+  display: grid;
+  place-items: center;
+}
+
+.RouteMap__numberIcon span {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 22, 37, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.RouteMap__runnerIcon {
+  display: grid;
+  place-items: center;
+}
+
+.RouteMap__runnerIcon span {
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 16, 28, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.34);
+  font-size: 15px;
+  line-height: 1;
 }
 
 .RouteMap__placeholder {
   position: absolute;
-  inset: auto 14px 14px 14px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   display: grid;
-  gap: 6px;
-  padding: 14px 16px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--theme-text-muted);
-  font-size: 13px;
-  line-height: 18px;
+  gap: 4px;
+  padding: 10px 12px;
+  background: rgba(8, 12, 20, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.RouteMap__placeholder strong {
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 700;
+}
+
+.RouteMap__locateButton {
+  position: absolute;
+  left: 12px;
+  top: 102px;
+  z-index: 450;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(11, 18, 31, 0.92);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+  color: #f8fafc;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
 }
