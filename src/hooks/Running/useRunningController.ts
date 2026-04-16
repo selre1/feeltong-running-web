@@ -1,16 +1,16 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { RunningController } from './types'
-import useRunRecords from './useRunRecords'
-import useRunTracking from './useRunTracking'
+import useRunningRecords from './useRunningRecords'
+import useRunningTracking from './useRunningTracking'
 import useRunningSummary from './useRunningSummary'
 import useRunningView from './useRunningView'
 
 export default function useRunningController(): RunningController {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const tracking = useRunTracking()
-  const { records, refetch } = useRunRecords(true)
+  const tracking = useRunningTracking()
+  const { records, refetch } = useRunningRecords(true)
   const { runningView, setRunningView } = useRunningView({
     pathname,
     trackingStatus: tracking.draft.status,
@@ -68,6 +68,7 @@ export default function useRunningController(): RunningController {
 
   return {
     averagePaceSeconds: tracking.averagePaceSeconds,
+    canStartRun: tracking.canStartRun,
     distanceMeters: tracking.distanceMeters,
     draft: tracking.draft,
     elapsedMs: tracking.elapsedMs,

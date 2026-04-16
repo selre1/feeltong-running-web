@@ -23,7 +23,7 @@ const toRunRecord = (record: ApiRunRecord): RunRecord => ({
   route: record.route,
 })
 
-export default function useRunRecords(enabled: boolean) {
+export default function useRunningRecords(enabled: boolean) {
   const apiClient = useApiClient()
   const [records, setRecords] = useState<RunRecord[]>([])
 

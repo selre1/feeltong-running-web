@@ -19,6 +19,7 @@ function SkeletonApp({ onLogout, user }: { onLogout: () => void | Promise<void>;
       <Header variant="bar" />
       <AppRoutes
         averagePaceSeconds={running.averagePaceSeconds}
+        canStartRun={running.canStartRun}
         distanceMeters={running.distanceMeters}
         draft={running.draft}
         elapsedMs={running.elapsedMs}

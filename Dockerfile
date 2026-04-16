@@ -22,4 +22,4 @@ COPY --from=build /app/dist /app/dist
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
-CMD ["sh", "-c", "nginx -g 'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]

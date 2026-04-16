@@ -9,6 +9,7 @@ import type { RunDraft, RunRecord } from '../../types/run'
 
 interface AppRoutesProps {
   averagePaceSeconds: number | null
+  canStartRun: boolean
   distanceMeters: number
   draft: RunDraft
   elapsedMs: number
@@ -62,6 +63,7 @@ export default function AppRoutes(props: AppRoutesProps) {
         element={
           <RunningPage
             averagePaceSeconds={props.averagePaceSeconds}
+            canStartRun={props.canStartRun}
             distanceMeters={props.distanceMeters}
             draft={props.draft}
             elapsedMs={props.elapsedMs}
@@ -109,4 +111,3 @@ export default function AppRoutes(props: AppRoutesProps) {
     </Routes>
   )
 }
-

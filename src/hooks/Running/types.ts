@@ -4,6 +4,7 @@ export type RunningView = 'ready' | 'active' | 'summary'
 
 export interface RunningControllerState {
   averagePaceSeconds: number | null
+  canStartRun: boolean
   distanceMeters: number
   draft: RunDraft
   elapsedMs: number

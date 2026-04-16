@@ -9,6 +9,7 @@ import './index.css'
 
 interface RunningPageProps {
   averagePaceSeconds: number | null
+  canStartRun: boolean
   distanceMeters: number
   draft: RunDraft
   elapsedMs: number
@@ -34,6 +35,7 @@ const DEFAULT_CENTER = {
 
 export default function RunningPage({
   averagePaceSeconds,
+  canStartRun,
   distanceMeters,
   draft,
   elapsedMs,
@@ -93,7 +95,12 @@ export default function RunningPage({
               <p>모임을 만들어 러닝을 시작해보세요.</p>
             </div>
             <div className="RunningPage__actions">
-              <Button className="RunningPage__button RunningPage__button--primary" onClick={onStart} variant="purple">
+              <Button
+                className="RunningPage__button RunningPage__button--primary"
+                disabled={!canStartRun}
+                onClick={onStart}
+                variant="purple"
+              >
                 러닝 시작
               </Button>
             </div>
@@ -171,7 +178,7 @@ export default function RunningPage({
             {saveSummaryError ? <p className="RunningPage__notice RunningPage__notice--panel">{saveSummaryError}</p> : null}
 
             <div className="RunningPage__actions RunningPage__actions--inline RunningPage__actions--summary">
-              <Button className="RunningPage__button" onClick={onStart} variant="white">
+              <Button className="RunningPage__button" disabled={!canStartRun} onClick={onStart} variant="white">
                 한 번 더
               </Button>
               <Button

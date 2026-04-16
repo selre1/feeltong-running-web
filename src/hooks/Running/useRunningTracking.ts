@@ -1,6 +1,8 @@
-import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import type { RunDraft, RunRecord } from '../../types/run'
 import { getAveragePaceSeconds, getRouteDistanceMeters, toGeoPoint } from '../../utils/geo'
+import useGeolocation from './useGeolocation'
+import useGpsPermission from './useGpsPermission'
 
 const RECORDS_STORAGE_KEY = 'feeltong-running-records'
 const DRAFT_STORAGE_KEY = 'feeltong-running-draft'
@@ -48,12 +50,12 @@ const shouldAppendPoint = (route: RunDraft['route'], point: RunDraft['route'][nu
   return point.timestamp - previous.timestamp >= ROUTE_SAMPLE_INTERVAL_MS
 }
 
-export default function useRunTracking() {
+export default function useRunningTracking() {
   const [draft, setDraft] = useState<RunDraft>(() => parseStoredJson(DRAFT_STORAGE_KEY, createEmptyDraft()))
   const [records, setRecords] = useState<RunRecord[]>(() => parseStoredJson(RECORDS_STORAGE_KEY, []))
   const [now, setNow] = useState(() => Date.now())
-  const [notice, setNotice] = useState('GPS 권한을 허용하면 현재 위치를 표시합니다.')
-  const watchIdRef = useRef<number | null>(null)
+  const [notice, setNotice] = useState('GPS 권한 상태를 확인하는 중입니다.')
+  const { permissionState, setPermissionState } = useGpsPermission()
 
   const elapsedMs = getElapsedMs(draft, now)
   const distanceMeters = useMemo(() => getRouteDistanceMeters(draft.route), [draft.route])
@@ -61,6 +63,7 @@ export default function useRunTracking() {
     () => getAveragePaceSeconds(distanceMeters, elapsedMs),
     [distanceMeters, elapsedMs],
   )
+  const canStartRun = permissionState === 'granted'
 
   useEffect(() => {
     window.localStorage.setItem(RECORDS_STORAGE_KEY, JSON.stringify(records))
@@ -69,12 +72,6 @@ export default function useRunTracking() {
   useEffect(() => {
     window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft))
   }, [draft])
-
-  useEffect(() => {
-    if (draft.status === 'idle' && draft.currentPosition) {
-      setNotice('GPS 허용됨: 현재 위치를 확인했습니다.')
-    }
-  }, [draft.status, draft.currentPosition])
 
   useEffect(() => {
     if (draft.status !== 'running') {
@@ -86,6 +83,7 @@ export default function useRunTracking() {
 
   const handlePosition = useEffectEvent((position: GeolocationPosition) => {
     const point = toGeoPoint(position)
+    setPermissionState('granted')
 
     setDraft((previous) => {
       const route =
@@ -101,7 +99,7 @@ export default function useRunTracking() {
     })
 
     if (draft.status === 'running') {
-      setNotice(`GPS 수신 중입니다. 최신 위치 ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`)
+      setNotice(`GPS 수신 중: ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`)
       return
     }
 
@@ -109,65 +107,90 @@ export default function useRunTracking() {
   })
 
   const handleGeolocationError = useEffectEvent((error: GeolocationPositionError) => {
-    const fallback =
-      error.code === error.PERMISSION_DENIED
-        ? 'GPS 권한이 거부되었습니다. 브라우저 설정에서 위치 권한을 허용해 주세요.'
-        : 'GPS 수신이 불안정합니다. 실외 또는 실제 기기에서 다시 확인해 주세요.'
-    setNotice(fallback)
+    if (error.code === error.PERMISSION_DENIED) {
+      setPermissionState('denied')
+      setNotice('GPS 권한이 차단되었습니다. 브라우저 설정에서 위치 권한을 허용해 주세요.')
+      return
+    }
+
+    setNotice('GPS 수신이 불안정합니다. 네트워크/기기 상태를 확인해 주세요.')
+  })
+
+  const { requestCurrentPosition, startWatch, stopWatch } = useGeolocation({
+    onError: handleGeolocationError,
+    onPosition: handlePosition,
   })
 
   useEffect(() => {
-    if (draft.status === 'idle' && !draft.currentPosition) {
-      if (!('geolocation' in navigator)) {
-        setNotice('이 브라우저는 Geolocation API를 지원하지 않습니다.')
-        return
-      }
+    if (permissionState === 'granted' && draft.status === 'idle') {
+      requestCurrentPosition()
+    }
+  }, [draft.status, permissionState, requestCurrentPosition])
 
-      navigator.geolocation.getCurrentPosition(handlePosition, handleGeolocationError, {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 12_000,
-      })
+  useEffect(() => {
+    if (permissionState === 'granted' && draft.status === 'idle') {
+      setNotice('GPS 허용됨: 러닝을 시작할 수 있습니다.')
+      return
+    }
+
+    if (permissionState === 'denied') {
+      setNotice('GPS 권한이 차단되었습니다. 브라우저 설정에서 위치 권한을 허용해 주세요.')
+      return
+    }
+
+    if (permissionState === 'prompt') {
+      setNotice('GPS 권한이 필요합니다. 아래 버튼으로 위치 권한을 요청해 주세요.')
+      return
+    }
+
+    if (permissionState === 'unsupported') {
+      setNotice('이 브라우저는 위치 기능을 지원하지 않습니다.')
+      return
+    }
+  }, [draft.status, permissionState])
+
+  useEffect(() => {
+    if (draft.status === 'idle') {
+      if (!requestCurrentPosition()) {
+        setPermissionState('unsupported')
+        setNotice('이 브라우저는 위치 기능을 지원하지 않습니다.')
+      }
       return
     }
 
     if (draft.status !== 'running') {
-      if (watchIdRef.current !== null) {
-        navigator.geolocation.clearWatch(watchIdRef.current)
-        watchIdRef.current = null
-      }
+      stopWatch()
       return
     }
 
-    if (!('geolocation' in navigator)) {
-      setNotice('이 브라우저는 Geolocation API를 지원하지 않습니다.')
+    if (!requestCurrentPosition()) {
+      setPermissionState('unsupported')
+      setNotice('이 브라우저는 위치 기능을 지원하지 않습니다.')
       return
     }
 
-    navigator.geolocation.getCurrentPosition(handlePosition, handleGeolocationError, {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 15_000,
-    })
-
-    watchIdRef.current = navigator.geolocation.watchPosition(handlePosition, handleGeolocationError, {
-      enableHighAccuracy: true,
-      maximumAge: 2_000,
-      timeout: 20_000,
-    })
+    if (!startWatch()) {
+      setPermissionState('unsupported')
+      setNotice('이 브라우저는 위치 기능을 지원하지 않습니다.')
+      return
+    }
 
     return () => {
-      if (watchIdRef.current !== null) {
-        navigator.geolocation.clearWatch(watchIdRef.current)
-        watchIdRef.current = null
-      }
+      stopWatch()
     }
-  }, [draft.status, draft.currentPosition, handleGeolocationError, handlePosition])
+  }, [draft.status, requestCurrentPosition, setPermissionState, startWatch, stopWatch])
 
   const startRun = (onAfterStart?: () => void) => {
+    if (!canStartRun) {
+      setNotice('GPS 권한을 허용해야 러닝을 시작할 수 있습니다.')
+      return
+    }
+
+    requestCurrentPosition()
+
     const startedAt = Date.now()
     setNow(startedAt)
-    setNotice('러닝을 시작했습니다. GPS 신호를 수신 중입니다.')
+    setNotice('러닝 시작: GPS를 추적합니다.')
     setDraft({
       status: 'running',
       startedAt,
@@ -182,7 +205,7 @@ export default function useRunTracking() {
   const pauseRun = () => {
     const pausedStartedAt = Date.now()
     setNow(pausedStartedAt)
-    setNotice('러닝을 일시 정지했습니다.')
+    setNotice('러닝 일시정지')
     setDraft((previous) => ({
       ...previous,
       status: 'paused',
@@ -191,9 +214,16 @@ export default function useRunTracking() {
   }
 
   const resumeRun = (onAfterResume?: () => void) => {
+    if (!canStartRun) {
+      setNotice('GPS 권한을 허용해야 러닝을 재시작할 수 있습니다.')
+      return
+    }
+
+    requestCurrentPosition()
+
     const resumedAt = Date.now()
     setNow(resumedAt)
-    setNotice('러닝을 다시 시작했습니다.')
+    setNotice('러닝 재시작: GPS를 다시 추적합니다.')
     setDraft((previous) => ({
       ...previous,
       status: 'running',
@@ -228,12 +258,13 @@ export default function useRunTracking() {
     setRecords((previous) => [record, ...previous].slice(0, 100))
     setDraft(createEmptyDraft())
     setNow(endedAt)
-    setNotice('러닝이 종료되었습니다. 저장 버튼으로 기록을 보관하세요.')
+    setNotice('러닝 종료: 결과를 확인해 주세요.')
     onAfterFinish?.(record)
   }
 
   return {
     averagePaceSeconds,
+    canStartRun,
     distanceMeters,
     draft,
     elapsedMs,
@@ -245,4 +276,3 @@ export default function useRunTracking() {
     startRun,
   }
 }
-
