@@ -1,32 +1,25 @@
-﻿import type { ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { navigationMenus } from '../../tools/navigation'
 import type { TabKey } from '../../types/run'
 import './Navigation.css'
 
-interface NavigationProps {
-  activeTab: TabKey
-  onNavigate: (tab: TabKey) => void
-}
-
 function NavigationMenu({
-  active,
   icon,
+  isActive,
   label,
-  onClick,
+  to,
 }: {
-  active: boolean
   icon: ReactNode
+  isActive: boolean
   label: string
-  onClick: () => void
+  to: string
 }) {
   return (
-    <button
-      className={['SkeletonNavigation__menu', active ? 'is-active' : ''].filter(Boolean).join(' ')}
-      onClick={onClick}
-      type="button"
-    >
+    <Link className={['SkeletonNavigation__menu', isActive ? 'is-active' : ''].filter(Boolean).join(' ')} to={to}>
       <div className="SkeletonNavigation__icon">{icon}</div>
       <div className="SkeletonNavigation__text">{label}</div>
-    </button>
+    </Link>
   )
 }
 
@@ -71,16 +64,23 @@ function NavigationIcon({ tab }: { tab: TabKey }) {
   )
 }
 
-export default function Navigation({ activeTab, onNavigate }: NavigationProps) {
+export default function Navigation() {
+  const { pathname } = useLocation()
+
   return (
     <div id="navigation-body" className="SkeletonNavigation">
       <div className="SkeletonNavigation__inner">
-        <NavigationMenu active={activeTab === 'home'} icon={<NavigationIcon tab="home" />} label="홈" onClick={() => onNavigate('home')} />
-        <NavigationMenu active={activeTab === 'meeting'} icon={<NavigationIcon tab="meeting" />} label="모임" onClick={() => onNavigate('meeting')} />
-        <NavigationMenu active={activeTab === 'running'} icon={<NavigationIcon tab="running" />} label="러닝" onClick={() => onNavigate('running')} />
-        <NavigationMenu active={activeTab === 'record'} icon={<NavigationIcon tab="record" />} label="기록" onClick={() => onNavigate('record')} />
-        <NavigationMenu active={activeTab === 'my'} icon={<NavigationIcon tab="my" />} label="마이" onClick={() => onNavigate('my')} />
+        {navigationMenus.map((menu) => (
+          <NavigationMenu
+            icon={<NavigationIcon tab={menu.key} />}
+            isActive={menu.key === 'home' ? pathname === '/' || pathname.startsWith('/home') : pathname.startsWith(menu.to)}
+            key={menu.key}
+            label={menu.label}
+            to={menu.to}
+          />
+        ))}
       </div>
     </div>
   )
 }
+

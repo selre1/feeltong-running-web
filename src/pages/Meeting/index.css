@@ -1,24 +1,32 @@
 .MeetingPage {
   display: grid;
-  gap: 18px;
-  padding: 28px 0 12px;
+  gap: var(--ui-page-gap);
+  padding: var(--ui-page-padding-top) 0 12px;
+}
+
+.MeetingPage .AdaptiveCard {
+  border-radius: var(--ui-radius-card);
+  border: var(--ui-border-muted);
+  background: var(--ui-surface-card);
+  box-shadow: none;
+  padding: var(--ui-card-padding);
 }
 
 .MeetingPage__empty {
   display: grid;
-  gap: 10px;
-  min-height: 220px;
+  gap: 8px;
+  min-height: 180px;
   align-content: center;
 }
 
 .MeetingPage__empty strong {
-  color: var(--theme-text);
-  font-size: 28px;
-  line-height: 32px;
+  color: var(--ui-color-text-primary);
+  font-size: var(--ui-text-title);
+  line-height: 1.2;
 }
 
 .MeetingPage__empty p {
-  color: var(--theme-text-muted);
-  font-size: 15px;
-  line-height: 22px;
+  color: var(--ui-color-text-secondary);
+  font-size: var(--ui-text-body);
+  line-height: 1.6;
 }
