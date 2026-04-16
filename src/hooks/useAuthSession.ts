@@ -36,8 +36,15 @@ export const useAuthSession = () => {
 
   const loadSession = useCallback(async () => {
     try {
-      const { data } = await apiClient.get<SessionResponse>('/auth/session')
-      setUser(data.user)
+      const response = await apiClient.get<SessionResponse>('/auth/session', {
+        validateStatus: (status) => status === 200 || status === 401,
+      })
+
+      if (response.status === 200) {
+        setUser(response.data.user)
+      } else {
+        setUser(null)
+      }
     } catch {
       setUser(null)
     } finally {
