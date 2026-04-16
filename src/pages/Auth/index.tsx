@@ -33,7 +33,7 @@ export default function AuthPage({ error, loading, onLogin, onSignUp }: AuthPage
     <div className="AuthPage">
       <div className="AuthPage__card">
         <div className="AuthPage__logo">
-          <span className="AuthPage__logoIcon">FTR</span>
+          <span className="AuthPage__logoIcon">방배</span>
           <h1 className="AuthPage__logoText">Feeltong Running</h1>
           <p className="AuthPage__desc">{isSignUp ? '등록하세요!' : '뛰어가요!'}</p>
         </div>
