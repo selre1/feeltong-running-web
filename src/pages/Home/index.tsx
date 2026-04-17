@@ -7,7 +7,7 @@ import PeriodTabs, { type PeriodKey } from '../../components/PeriodTabs'
 import StampCalendar from '../../components/StampCalendar'
 import { useAuth } from '../../contexts/AuthContext'
 import { useRunning } from '../../contexts/RunningContext'
-import { formatDistance, formatDuration, formatNumber } from '../../utils/format'
+import { formatDistance, formatDuration, formatNumber, formatPace } from '../../utils/format'
 import { getRecordsByPeriod, summarizeRecords } from '../../utils/stats'
 import './index.css'
 
@@ -63,6 +63,14 @@ export default function HomePage() {
             <AdaptiveCard className="HomePage__statCard HomePage__statCard--accent">
               <span>오늘 완료</span>
               <strong>{formatNumber(todayRecordCount)}개</strong>
+            </AdaptiveCard>
+            <AdaptiveCard className="HomePage__statCard">
+              <span>평균 페이스</span>
+              <strong>{formatPace(summary.averagePaceSeconds)}</strong>
+            </AdaptiveCard>
+            <AdaptiveCard className="HomePage__statCard">
+              <span>총 칼로리</span>
+              <strong>{formatNumber(summary.calories)} kcal</strong>
             </AdaptiveCard>
           </div>
         </section>
