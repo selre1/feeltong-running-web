@@ -1,8 +1,12 @@
-{ 
-    "rewrites": 
-    [
-        { 
-            "source": "/(.*)", "destination": "/index.html" 
+{
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://feeltong-running-back-latest.onrender.com/:path*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
-    ] 
+    ]
 }
