@@ -6,11 +6,11 @@ import useRunningTracking from './useRunningTracking'
 import useRunningSummary from './useRunningSummary'
 import useRunningView from './useRunningView'
 
-export default function useRunningController(): RunningController {
+export default function useRunningController(isAuthenticated: boolean): RunningController {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const tracking = useRunningTracking()
-  const { records, refetch } = useRunningRecords(true)
+  const { records: remoteRecords, refetch } = useRunningRecords(isAuthenticated)
   const { runningView, setRunningView } = useRunningView({
     pathname,
     trackingStatus: tracking.draft.status,
@@ -18,6 +18,7 @@ export default function useRunningController(): RunningController {
   const summary = useRunningSummary({ onSaved: refetch })
 
   const isRunningActive = pathname === '/running' && runningView === 'active'
+  const records = isAuthenticated ? remoteRecords : tracking.records
 
   const todayRecordCount = useMemo(() => {
     const today = new Date()
@@ -56,6 +57,13 @@ export default function useRunningController(): RunningController {
   }
 
   const saveSummary = async () => {
+    if (!isAuthenticated) {
+      summary.clearSummary()
+      setRunningView('ready')
+      navigate('/running')
+      return
+    }
+
     const saved = await summary.saveSummary()
     if (!saved) {
       return

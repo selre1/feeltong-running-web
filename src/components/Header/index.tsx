@@ -15,7 +15,9 @@ interface BarHeaderProps extends BaseHeaderProps {
 
 interface HomeHeaderProps extends BaseHeaderProps {
   onPrimaryAction: () => void
-  onSecondaryAction: () => void
+  onSecondaryAction?: () => void
+  primaryActionLabel: string
+  secondaryActionLabel?: string
   subtitle: string
   title: string
   variant: 'home'
@@ -64,11 +66,13 @@ export default function Header(props: HeaderProps) {
 
             <div className="HomeHeader__actions">
               <Button className="HomeHeader__button" onClick={props.onPrimaryAction} variant="purple">
-                러닝 시작
+                {props.primaryActionLabel}
               </Button>
-              <Button className="HomeHeader__button" onClick={props.onSecondaryAction} variant="white">
-                기록 보기
-              </Button>
+              {props.onSecondaryAction && props.secondaryActionLabel ? (
+                <Button className="HomeHeader__button" onClick={props.onSecondaryAction} variant="white">
+                  {props.secondaryActionLabel}
+                </Button>
+              ) : null}
             </div>
           </div>
         </AdaptiveDiv>

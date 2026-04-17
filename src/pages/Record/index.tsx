@@ -1,5 +1,6 @@
 import AdaptiveDiv from '../../components/AdaptiveDiv'
 import AdaptiveCard from '../../components/AdaptiveDiv/AdaptiveCard'
+import AuthRequiredCard from '../../components/AuthRequiredCard'
 import Header from '../../components/Header'
 import { recordCopy } from '../../tools/pageText'
 import type { RunRecord } from '../../types/run'
@@ -8,18 +9,29 @@ import { formatKoreanDateTime } from '../../utils/date'
 import './index.css'
 
 interface RecordPageProps {
+  isAuthenticated: boolean
+  onLogin: () => void
   records: RunRecord[]
 }
 
 const formatTotalKm = (meters: number) => (meters / 1000).toFixed(2)
 
-export default function RecordPage({ records }: RecordPageProps) {
+export default function RecordPage({ isAuthenticated, onLogin, records }: RecordPageProps) {
   const totalDistanceMeters = records.reduce((sum, record) => sum + record.distanceMeters, 0)
 
   return (
     <AdaptiveDiv className="RecordPage" type="center">
       <Header title={recordCopy.title} variant="page" />
 
+      {!isAuthenticated ? (
+        <AuthRequiredCard
+          description="러닝 기록은 로그인 후 계정과 연동되어 표시됩니다."
+          onLogin={onLogin}
+          title="로그인이 필요합니다."
+        />
+      ) : null}
+
+      {isAuthenticated ? (
       <AdaptiveCard className="RecordPage__summary">
         <div className="RecordPage__summaryItem">
           <strong>{records.length}</strong>
@@ -31,8 +43,9 @@ export default function RecordPage({ records }: RecordPageProps) {
           <span>{recordCopy.totalDistanceLabel}</span>
         </div>
       </AdaptiveCard>
+      ) : null}
 
-      {records.length > 0 ? (
+      {isAuthenticated && records.length > 0 ? (
         <div className="RecordPage__list">
           {records.map((record) => (
             <div className="RecordPage__item" key={record.id}>
@@ -54,13 +67,14 @@ export default function RecordPage({ records }: RecordPageProps) {
             </div>
           ))}
         </div>
-      ) : (
+      ) : null}
+
+      {isAuthenticated && records.length === 0 ? (
         <AdaptiveCard className="RecordPage__empty">
           <strong>{recordCopy.emptyTitle}</strong>
           <p>{recordCopy.emptyDescription}</p>
         </AdaptiveCard>
-      )}
+      ) : null}
     </AdaptiveDiv>
   )
 }
-
