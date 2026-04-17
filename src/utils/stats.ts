@@ -5,6 +5,8 @@ export interface RunSummary {
   count: number
   distanceMeters: number
   durationMs: number
+  averagePaceSeconds: number | null
+  calories: number
 }
 
 const getPeriodStart = (period: PeriodKey) => {
@@ -32,8 +34,8 @@ export const getRecordsByPeriod = (records: RunRecord[], period: PeriodKey) => {
   return records.filter((record) => record.startedAt >= threshold)
 }
 
-export const summarizeRecords = (records: RunRecord[]): RunSummary =>
-  records.reduce(
+export const summarizeRecords = (records: RunRecord[]): RunSummary => {
+  const base = records.reduce(
     (accumulator, record) => ({
       count: accumulator.count + 1,
       distanceMeters: accumulator.distanceMeters + record.distanceMeters,
@@ -41,4 +43,16 @@ export const summarizeRecords = (records: RunRecord[]): RunSummary =>
     }),
     { count: 0, distanceMeters: 0, durationMs: 0 },
   )
+
+  const averagePaceSeconds =
+    base.distanceMeters > 0 && base.durationMs > 0
+      ? base.durationMs / 1000 / (base.distanceMeters / 1000)
+      : null
+
+  return {
+    ...base,
+    averagePaceSeconds,
+    calories: Math.round((base.distanceMeters / 1000) * 62),
+  }
+}
 

@@ -5,7 +5,7 @@ import type { GeoPoint } from '../../types/run'
 import { DARK_TILE_SUBDOMAINS, DARK_TILE_URL, DEFAULT_ZOOM } from './leafletConfig'
 import { createRunnerIcon, toLatLng } from './leafletHelpers'
 import RecenterMap from './RecenterMap'
-import { RouteMarkerLayer, RoutePolylineLayer } from './RouteLayers'
+import { RoutePolylineLayer } from './RouteLayers'
 import 'leaflet/dist/leaflet.css'
 import './RouteMap.css'
 
@@ -62,7 +62,6 @@ export default function RouteMap({
           <TileLayer subdomains={DARK_TILE_SUBDOMAINS} url={DARK_TILE_URL} />
 
           <RoutePolylineLayer points={sampledRoute} />
-          <RouteMarkerLayer points={sampledRoute} />
 
           {hasLivePosition && showCurrentMarker ? <Marker icon={runnerIcon} position={toLatLng(currentPosition)} /> : null}
         </MapContainer>

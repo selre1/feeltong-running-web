@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react'
 import { Marker, Polyline, Tooltip } from 'react-leaflet'
 import type { GeoPoint } from '../../types/run'
 import { buildRainbowSegments, createNumberIcon, toLatLng } from './leafletHelpers'
@@ -10,8 +11,8 @@ interface RouteMarkerLayerProps {
   points: GeoPoint[]
 }
 
-export function RoutePolylineLayer({ points }: RoutePolylineLayerProps) {
-  const rainbowSegments = buildRainbowSegments(points)
+export const RoutePolylineLayer = memo(function RoutePolylineLayer({ points }: RoutePolylineLayerProps) {
+  const rainbowSegments = useMemo(() => buildRainbowSegments(points), [points])
 
   return (
     <>
@@ -20,13 +21,13 @@ export function RoutePolylineLayer({ points }: RoutePolylineLayerProps) {
       ))}
     </>
   )
-}
+})
 
-export function RouteMarkerLayer({ points }: RouteMarkerLayerProps) {
+export const RouteMarkerLayer = memo(function RouteMarkerLayer({ points }: RouteMarkerLayerProps) {
   return (
     <>
       {points.map((point, index) => (
-        <Marker key={`marker-${point.timestamp}-${index}`} position={toLatLng(point)} icon={createNumberIcon(index + 1)}>
+        <Marker key={point.timestamp} position={toLatLng(point)} icon={createNumberIcon(index + 1)}>
           <Tooltip direction="top" offset={[0, -10]} opacity={0.9}>
             {index + 1}
           </Tooltip>
@@ -34,5 +35,5 @@ export function RouteMarkerLayer({ points }: RouteMarkerLayerProps) {
       ))}
     </>
   )
-}
+})
 

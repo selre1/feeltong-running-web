@@ -1,22 +1,22 @@
+import { useNavigate } from 'react-router-dom'
 import AdaptiveDiv from '../../components/AdaptiveDiv'
 import AdaptiveCard from '../../components/AdaptiveDiv/AdaptiveCard'
 import AuthRequiredCard from '../../components/AuthRequiredCard'
 import Header from '../../components/Header'
+import RouteThumbnail from '../../components/RouteThumbnail'
+import { useAuth } from '../../contexts/AuthContext'
+import { useRunning } from '../../contexts/RunningContext'
 import { recordCopy } from '../../tools/pageText'
-import type { RunRecord } from '../../types/run'
 import { formatDistance, formatDuration, formatPace } from '../../utils/format'
 import { formatKoreanDateTime } from '../../utils/date'
 import './index.css'
 
-interface RecordPageProps {
-  isAuthenticated: boolean
-  onLogin: () => void
-  records: RunRecord[]
-}
-
 const formatTotalKm = (meters: number) => (meters / 1000).toFixed(2)
 
-export default function RecordPage({ isAuthenticated, onLogin, records }: RecordPageProps) {
+export default function RecordPage() {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
+  const { records } = useRunning()
   const totalDistanceMeters = records.reduce((sum, record) => sum + record.distanceMeters, 0)
 
   return (
@@ -26,7 +26,7 @@ export default function RecordPage({ isAuthenticated, onLogin, records }: Record
       {!isAuthenticated ? (
         <AuthRequiredCard
           description="러닝 기록은 로그인 후 계정과 연동되어 표시됩니다."
-          onLogin={onLogin}
+          onLogin={() => navigate('/auth')}
           title="로그인이 필요합니다."
         />
       ) : null}
@@ -52,7 +52,7 @@ export default function RecordPage({ isAuthenticated, onLogin, records }: Record
               <p className="RecordPage__dateLabel">{formatKoreanDateTime(record.startedAt)}</p>
 
               <AdaptiveCard className="RecordPage__row">
-                <div className="RecordPage__thumb" aria-hidden="true" />
+                <RouteThumbnail className="RecordPage__thumb" route={record.route} />
 
                 <div className="RecordPage__content">
                   <p className="RecordPage__distance">{formatDistance(record.distanceMeters)}</p>

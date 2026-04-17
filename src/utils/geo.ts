@@ -36,38 +36,65 @@ export const getAveragePaceSeconds = (distanceMeters: number, durationMs: number
   return durationMs / 1000 / (distanceMeters / 1000)
 }
 
-export const projectPoint = ({ lat, lng }: GeoPointLike, zoom: number) => {
-  const scale = 256 * 2 ** zoom
-  const clampedLat = Math.max(-85.05112878, Math.min(85.05112878, lat))
-  const sinLat = Math.sin(toRadians(clampedLat))
-
-  return {
-    x: ((lng + 180) / 360) * scale,
-    y: (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale,
-  }
-}
-
-export const getMapZoom = (route: GeoPointLike[]) => {
-  const totalDistance = getRouteDistanceMeters(route)
-
-  if (totalDistance > 10_000) {
-    return 13
-  }
-
-  if (totalDistance > 5_000) {
-    return 14
-  }
-
-  if (totalDistance > 2_000) {
-    return 15
-  }
-
-  return 16
-}
-
 export const toGeoPoint = (position: GeolocationPosition): GeoPoint => ({
   lat: position.coords.latitude,
   lng: position.coords.longitude,
   accuracy: position.coords.accuracy,
   timestamp: position.timestamp,
 })
+
+const perpendicularDistanceDeg = (
+  point: GeoPointLike,
+  start: GeoPointLike,
+  end: GeoPointLike,
+): number => {
+  const dx = end.lng - start.lng
+  const dy = end.lat - start.lat
+
+  if (dx === 0 && dy === 0) {
+    return Math.sqrt((point.lat - start.lat) ** 2 + (point.lng - start.lng) ** 2)
+  }
+
+  const t = Math.max(
+    0,
+    Math.min(
+      1,
+      ((point.lat - start.lat) * dy + (point.lng - start.lng) * dx) / (dx ** 2 + dy ** 2),
+    ),
+  )
+
+  return Math.sqrt(
+    (point.lat - (start.lat + t * dy)) ** 2 + (point.lng - (start.lng + t * dx)) ** 2,
+  )
+}
+
+const douglasPeuckerRecursive = <T extends GeoPointLike>(points: T[], tolerance: number): T[] => {
+  if (points.length <= 2) return points
+
+  let maxDist = 0
+  let maxIdx = 0
+
+  for (let i = 1; i < points.length - 1; i++) {
+    const dist = perpendicularDistanceDeg(points[i], points[0], points[points.length - 1])
+    if (dist > maxDist) {
+      maxDist = dist
+      maxIdx = i
+    }
+  }
+
+  if (maxDist > tolerance) {
+    const left = douglasPeuckerRecursive(points.slice(0, maxIdx + 1), tolerance)
+    const right = douglasPeuckerRecursive(points.slice(maxIdx), tolerance)
+    return [...left.slice(0, -1), ...right]
+  }
+
+  return [points[0], points[points.length - 1]]
+}
+
+export const simplifyRoute = <T extends GeoPointLike>(
+  points: T[],
+  toleranceDegrees = 0.00005,
+): T[] => {
+  if (points.length <= 2) return points
+  return douglasPeuckerRecursive(points, toleranceDegrees)
+}

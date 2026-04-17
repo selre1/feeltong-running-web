@@ -3,28 +3,10 @@ import Button from '../../components/Button'
 import Header from '../../components/Header'
 import RouteMap from '../../components/RouteMap/RouteMap'
 import AdaptiveCard from '../../components/AdaptiveDiv/AdaptiveCard'
-import type { RunDraft, RunRecord } from '../../types/run'
+import { useRunning } from '../../contexts/RunningContext'
+import { clsx } from '../../utils/clsx'
 import { formatCalories, formatDistance, formatDuration, formatPace } from '../../utils/format'
 import './index.css'
-
-interface RunningPageProps {
-  averagePaceSeconds: number | null
-  canStartRun: boolean
-  distanceMeters: number
-  draft: RunDraft
-  elapsedMs: number
-  isSavingSummary: boolean
-  isSummarySaved: boolean
-  latestSummary: RunRecord | null
-  notice: string
-  onFinish: () => void
-  onPause: () => void
-  onResume: () => void
-  onSaveSummary: () => void
-  onStart: () => void
-  saveSummaryError: string
-  runningView: 'ready' | 'active' | 'summary'
-}
 
 const DEFAULT_CENTER = {
   lat: 37.5665,
@@ -33,24 +15,25 @@ const DEFAULT_CENTER = {
   timestamp: 0,
 }
 
-export default function RunningPage({
-  averagePaceSeconds,
-  canStartRun,
-  distanceMeters,
-  draft,
-  elapsedMs,
-  isSavingSummary,
-  isSummarySaved,
-  latestSummary,
-  notice,
-  onFinish,
-  onPause,
-  onResume,
-  onSaveSummary,
-  onStart,
-  saveSummaryError,
-  runningView,
-}: RunningPageProps) {
+export default function RunningPage() {
+  const {
+    averagePaceSeconds,
+    canStartRun,
+    distanceMeters,
+    draft,
+    elapsedMs,
+    isSavingSummary,
+    isSummarySaved,
+    latestSummary,
+    notice,
+    finishRun,
+    pauseRun,
+    resumeRun,
+    saveSummary,
+    startRun,
+    saveSummaryError,
+    runningView,
+  } = useRunning()
   const summarySource = latestSummary ?? null
   const isActiveView = runningView === 'active'
   const isSummaryView = runningView === 'summary'
@@ -59,14 +42,12 @@ export default function RunningPage({
 
   return (
     <AdaptiveDiv
-      className={[
+      className={clsx(
         'RunningPage',
-        runningView === 'ready' ? 'RunningPage--ready' : '',
-        isActiveView ? 'RunningPage--active' : '',
-        isSummaryView ? 'RunningPage--summary' : '',
-      ]
-        .filter(Boolean)
-        .join(' ')}
+        runningView === 'ready' && 'RunningPage--ready',
+        isActiveView && 'RunningPage--active',
+        isSummaryView && 'RunningPage--summary',
+      )}
       type="center"
     >
       <Header
@@ -98,7 +79,7 @@ export default function RunningPage({
               <Button
                 className="RunningPage__button RunningPage__button--primary"
                 disabled={!canStartRun}
-                onClick={onStart}
+                onClick={startRun}
                 variant="purple"
               >
                 러닝 시작
@@ -132,23 +113,23 @@ export default function RunningPage({
             </div>
 
             <div
-              className={[
+              className={clsx(
                 'RunningPage__controls',
                 'RunningPage__controls--dock',
                 draft.status === 'paused' ? 'is-paused' : 'is-running',
-              ].join(' ')}
+              )}
             >
               {draft.status === 'paused' ? (
                 <>
-                  <Button className="RunningPage__button RunningPage__button--end" onClick={onFinish} variant="purple">
+                  <Button className="RunningPage__button RunningPage__button--end" onClick={finishRun} variant="purple">
                     끝내기
                   </Button>
-                  <Button className="RunningPage__button RunningPage__button--resume" onClick={onResume} variant="white">
+                  <Button className="RunningPage__button RunningPage__button--resume" onClick={resumeRun} variant="white">
                     재시작
                   </Button>
                 </>
               ) : (
-                <Button className="RunningPage__button RunningPage__button--pause" onClick={onPause} variant="purple">
+                <Button className="RunningPage__button RunningPage__button--pause" onClick={pauseRun} variant="purple">
                   일시정지
                 </Button>
               )}
@@ -178,13 +159,13 @@ export default function RunningPage({
             {saveSummaryError ? <p className="RunningPage__notice RunningPage__notice--panel">{saveSummaryError}</p> : null}
 
             <div className="RunningPage__actions RunningPage__actions--inline RunningPage__actions--summary">
-              <Button className="RunningPage__button" disabled={!canStartRun} onClick={onStart} variant="white">
+              <Button className="RunningPage__button" disabled={!canStartRun} onClick={startRun} variant="white">
                 한 번 더
               </Button>
               <Button
                 className="RunningPage__button RunningPage__button--primary"
                 disabled={isSavingSummary || isSummarySaved || !summarySource}
-                onClick={onSaveSummary}
+                onClick={saveSummary}
                 variant="purple"
               >
                 {isSummarySaved ? '저장 완료' : isSavingSummary ? '저장 중' : '저장'}

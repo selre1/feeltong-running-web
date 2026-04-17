@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import useApiClient from '../useApi'
 import type { RunRecord } from '../../types/run'
+import { simplifyRoute } from '../../utils/geo'
 
 interface UseRunningSummaryOptions {
   onSaved?: () => Promise<void> | void
@@ -47,7 +48,7 @@ export default function useRunningSummary({ onSaved }: UseRunningSummaryOptions 
         paceSecondsPerKm: latestSummary.averagePaceSeconds ?? 0,
         startedAt: new Date(latestSummary.startedAt).toISOString(),
         endedAt: new Date(latestSummary.endedAt).toISOString(),
-        route: latestSummary.route.map((point) => ({
+        route: simplifyRoute(latestSummary.route).map((point) => ({
           lat: point.lat,
           lng: point.lng,
           timestamp: point.timestamp,

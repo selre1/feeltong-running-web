@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { RunRecord } from '../../types/run'
 import './index.css'
 
@@ -35,7 +35,10 @@ export default function StampCalendar({ onTodayAction, records }: StampCalendarP
     [month, records, year],
   )
 
-  const cells = Array.from({ length: leadingDays + lastDay.getDate() }, (_, index) => {
+  const goToPrevMonth = useCallback(() => setCurrentDate(new Date(year, month - 1, 1)), [year, month])
+  const goToNextMonth = useCallback(() => setCurrentDate(new Date(year, month + 1, 1)), [year, month])
+
+  const cells = useMemo(() => Array.from({ length: leadingDays + lastDay.getDate() }, (_, index) => {
     const dayNumber = index - leadingDays + 1
     if (dayNumber < 1) {
       return <div className="StampCalendar__cell StampCalendar__cell--empty" key={`empty-${index}`} />
@@ -48,7 +51,11 @@ export default function StampCalendar({ onTodayAction, records }: StampCalendarP
 
     return (
       <button
-        className={['StampCalendar__cell', stamped ? 'is-stamped' : '', isToday ? 'is-today' : ''].filter(Boolean).join(' ')}
+        className={[
+          'StampCalendar__cell',
+          stamped ? 'is-stamped' : '',
+          isToday ? 'is-today' : '',
+        ].filter(Boolean).join(' ')}
         key={dateKey}
         type="button"
       >
@@ -56,18 +63,18 @@ export default function StampCalendar({ onTodayAction, records }: StampCalendarP
         {stamped ? <span className="StampCalendar__stamp">RUN</span> : null}
       </button>
     )
-  })
+  }), [leadingDays, lastDay, year, month, stampedDates, today])
 
   return (
     <section className="StampCalendar">
       <div className="StampCalendar__header">
-        <button className="StampCalendar__navButton" onClick={() => setCurrentDate(new Date(year, month - 1, 1))} type="button">
+        <button className="StampCalendar__navButton" onClick={goToPrevMonth} type="button">
           ‹
         </button>
         <strong>
           {year}년 {month + 1}월
         </strong>
-        <button className="StampCalendar__navButton" onClick={() => setCurrentDate(new Date(year, month + 1, 1))} type="button">
+        <button className="StampCalendar__navButton" onClick={goToNextMonth} type="button">
           ›
         </button>
       </div>
