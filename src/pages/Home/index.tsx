@@ -10,6 +10,8 @@ import { getRecordsByPeriod, summarizeRecords } from '../../utils/stats'
 import './index.css'
 
 interface HomePageProps {
+  isAuthenticated: boolean
+  onLogin: () => void
   onOpenRecords: () => void
   onOpenRunning: () => void
   records: RunRecord[]
@@ -17,6 +19,8 @@ interface HomePageProps {
 }
 
 export default function HomePage({
+  isAuthenticated,
+  onLogin,
   onOpenRecords,
   onOpenRunning,
   records,
@@ -24,15 +28,18 @@ export default function HomePage({
 }: HomePageProps) {
   const [period, setPeriod] = useState<PeriodKey>('week')
 
-  const filteredRecords = useMemo(() => getRecordsByPeriod(records, period), [period, records])
+  const effectivePeriod = isAuthenticated ? period : 'all'
+  const filteredRecords = useMemo(() => getRecordsByPeriod(records, effectivePeriod), [effectivePeriod, records])
   const summary = useMemo(() => summarizeRecords(filteredRecords), [filteredRecords])
 
   return (
     <>
       <Header
         variant="home"
-        onPrimaryAction={onOpenRunning}
-        onSecondaryAction={onOpenRecords}
+        onPrimaryAction={isAuthenticated ? onOpenRunning : onLogin}
+        onSecondaryAction={isAuthenticated ? onOpenRecords : undefined}
+        primaryActionLabel={isAuthenticated ? '러닝 시작' : '로그인'}
+        secondaryActionLabel={isAuthenticated ? '기록 보기' : undefined}
         subtitle="지금 바로 러닝을 시작해보세요."
         title="바로 뛰어버리기"
       />
@@ -44,7 +51,11 @@ export default function HomePage({
               <p className="HomePage__sectionLabel">종합</p>
               <h2>러닝 요약</h2>
             </div>
-            <PeriodTabs onChange={setPeriod} value={period} />
+            <PeriodTabs
+              disabled={!isAuthenticated}
+              onChange={setPeriod}
+              value={effectivePeriod}
+            />
           </div>
 
           <div className="HomePage__stats">

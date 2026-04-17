@@ -7,5 +7,5 @@
 }
 
 .SkeletonNavSpacer {
-  height: 102px;
+  height: calc(74px + env(safe-area-inset-bottom) + 14px);
 }
