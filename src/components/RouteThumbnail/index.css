@@ -1,0 +1,15 @@
+.RouteThumbnail {
+  display: block;
+  border-radius: var(--ui-radius-control);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(155deg, rgba(130, 150, 180, 0.5), rgba(95, 115, 145, 0.35)),
+    linear-gradient(35deg, rgba(60, 78, 106, 0.5), rgba(34, 46, 66, 0.35));
+  overflow: hidden;
+}
+
+.RouteThumbnail--empty {
+  background:
+    linear-gradient(155deg, rgba(130, 150, 180, 0.3), rgba(95, 115, 145, 0.2)),
+    linear-gradient(35deg, rgba(60, 78, 106, 0.3), rgba(34, 46, 66, 0.2));
+}

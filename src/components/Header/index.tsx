@@ -34,8 +34,12 @@ type HeaderProps = BarHeaderProps | HomeHeaderProps | PageHeaderProps
 
 function BrandMark() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24">
-      <path d="M12.7 2 7 12h4.2L9.3 22 17 11.2h-4.3L12.7 2Z" />
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+      <circle cx="16" cy="4.5" r="2.5" fill="currentColor" />
+      <path d="M15 7 L12 13 L8.5 19" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 13 L16.5 19.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M14 9 L10.5 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M14 9 L18 11.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   )
 }

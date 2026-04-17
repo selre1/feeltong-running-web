@@ -1,14 +1,9 @@
 import { type FormEvent, useState } from 'react'
+import { useAuth } from '../../contexts/AuthContext'
 import './index.css'
 
-interface AuthPageProps {
-  error: string
-  loading: boolean
-  onLogin: (payload: { email: string; password: string }) => Promise<void>
-  onSignUp: (payload: { email: string; nickname: string; password: string }) => Promise<void>
-}
-
-export default function AuthPage({ error, loading, onLogin, onSignUp }: AuthPageProps) {
+export default function AuthPage() {
+  const { error, loading, login, signUp } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [nickname, setNickname] = useState('')
@@ -16,14 +11,12 @@ export default function AuthPage({ error, loading, onLogin, onSignUp }: AuthPage
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-
     try {
       if (isSignUp) {
-        await onSignUp({ email, nickname, password })
+        await signUp({ email, nickname, password })
         return
       }
-
-      await onLogin({ email, password })
+      await login({ email, password })
     } catch {
       // Errors are handled by the auth hook state.
     }
@@ -99,12 +92,10 @@ export default function AuthPage({ error, loading, onLogin, onSignUp }: AuthPage
 
         <button
           className="AuthPage__toggle"
-          onClick={() => {
-            setIsSignUp((prev) => !prev)
-          }}
+          onClick={() => setIsSignUp((prev) => !prev)}
           type="button"
         >
-          {isSignUp ? '이미 계정이 있으신가요? 로그인' : "처음 오셨나요? 회원가입"}
+          {isSignUp ? '이미 계정이 있으신가요? 로그인' : '처음 오셨나요? 회원가입'}
         </button>
       </div>
     </div>

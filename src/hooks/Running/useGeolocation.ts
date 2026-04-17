@@ -16,8 +16,8 @@ export default function useGeolocation({ onError, onPosition }: UseGeolocationOp
     }
 
     navigator.geolocation.getCurrentPosition(onPosition, onError, {
-      enableHighAccuracy: true,
-      maximumAge: 0,
+      enableHighAccuracy: false,
+      maximumAge: 30_000,
       timeout: 12_000,
     })
 
@@ -31,7 +31,7 @@ export default function useGeolocation({ onError, onPosition }: UseGeolocationOp
 
     watchIdRef.current = navigator.geolocation.watchPosition(onPosition, onError, {
       enableHighAccuracy: true,
-      maximumAge: 2_000,
+      maximumAge: 5_000,
       timeout: 20_000,
     })
 

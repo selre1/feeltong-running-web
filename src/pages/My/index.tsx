@@ -1,20 +1,20 @@
+import { useNavigate } from 'react-router-dom'
 import AdaptiveDiv from '../../components/AdaptiveDiv'
 import AdaptiveCard from '../../components/AdaptiveDiv/AdaptiveCard'
 import AuthRequiredCard from '../../components/AuthRequiredCard'
 import Header from '../../components/Header'
+import { useAuth } from '../../contexts/AuthContext'
+import { useRunning } from '../../contexts/RunningContext'
 import { myCopy } from '../../tools/pageText'
 import './index.css'
 
-interface MyPageProps {
-  email: string
-  isAuthenticated: boolean
-  nickname: string
-  onLogin: () => void
-  onLogout: () => void | Promise<void>
-  recordCount: number
-}
-
-export default function MyPage({ email, isAuthenticated, nickname, onLogin, onLogout, recordCount }: MyPageProps) {
+export default function MyPage() {
+  const navigate = useNavigate()
+  const { isAuthenticated, user, logout } = useAuth()
+  const { records } = useRunning()
+  const email = user?.email ?? ''
+  const nickname = user?.nickname ?? ''
+  const recordCount = records.length
   return (
     <AdaptiveDiv className="MyPage" type="center">
       <div className="MyPage__header">
@@ -24,13 +24,13 @@ export default function MyPage({ email, isAuthenticated, nickname, onLogin, onLo
       {!isAuthenticated ? (
         <AuthRequiredCard
           description="마이 페이지는 로그인 후 프로필과 설정을 확인할 수 있습니다."
-          onLogin={onLogin}
+          onLogin={() => navigate('/auth')}
           title="로그인이 필요합니다."
         />
       ) : (
         <>
           <AdaptiveCard className="MyPage__profile">
-            <button className="MyPage__logout" onClick={onLogout} type="button">
+            <button className="MyPage__logout" onClick={logout} type="button">
               Logout
             </button>
             <div className="MyPage__avatar">FR</div>

@@ -1,31 +1,20 @@
 ﻿import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AdaptiveDiv from '../../components/AdaptiveDiv'
 import AdaptiveCard from '../../components/AdaptiveDiv/AdaptiveCard'
 import Header from '../../components/Header'
 import PeriodTabs, { type PeriodKey } from '../../components/PeriodTabs'
 import StampCalendar from '../../components/StampCalendar'
-import type { RunRecord } from '../../types/run'
+import { useAuth } from '../../contexts/AuthContext'
+import { useRunning } from '../../contexts/RunningContext'
 import { formatDistance, formatDuration, formatNumber } from '../../utils/format'
 import { getRecordsByPeriod, summarizeRecords } from '../../utils/stats'
 import './index.css'
 
-interface HomePageProps {
-  isAuthenticated: boolean
-  onLogin: () => void
-  onOpenRecords: () => void
-  onOpenRunning: () => void
-  records: RunRecord[]
-  todayRecordCount: number
-}
-
-export default function HomePage({
-  isAuthenticated,
-  onLogin,
-  onOpenRecords,
-  onOpenRunning,
-  records,
-  todayRecordCount,
-}: HomePageProps) {
+export default function HomePage() {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
+  const { records, todayRecordCount, openRecords, openRunning } = useRunning()
   const [period, setPeriod] = useState<PeriodKey>('week')
 
   const effectivePeriod = isAuthenticated ? period : 'all'
@@ -36,8 +25,8 @@ export default function HomePage({
     <>
       <Header
         variant="home"
-        onPrimaryAction={isAuthenticated ? onOpenRunning : onLogin}
-        onSecondaryAction={isAuthenticated ? onOpenRecords : undefined}
+        onPrimaryAction={isAuthenticated ? openRunning : () => navigate('/auth')}
+        onSecondaryAction={isAuthenticated ? openRecords : undefined}
         primaryActionLabel={isAuthenticated ? '러닝 시작' : '로그인'}
         secondaryActionLabel={isAuthenticated ? '기록 보기' : undefined}
         subtitle="지금 바로 러닝을 시작해보세요."
@@ -78,7 +67,7 @@ export default function HomePage({
           </div>
         </section>
 
-        <StampCalendar onTodayAction={onOpenRunning} records={records} />
+        <StampCalendar onTodayAction={openRunning} records={records} />
       </AdaptiveDiv>
     </>
   )

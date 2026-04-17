@@ -1,12 +1,13 @@
-import { useEffect, useEffectEvent, useMemo, useState } from 'react'
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import type { RunDraft, RunRecord } from '../../types/run'
-import { getAveragePaceSeconds, getRouteDistanceMeters, toGeoPoint } from '../../utils/geo'
+import { getAveragePaceSeconds, getDistanceMeters, getRouteDistanceMeters, toGeoPoint } from '../../utils/geo'
 import useGeolocation from './useGeolocation'
 import useGpsPermission from './useGpsPermission'
 
 const RECORDS_STORAGE_KEY = 'feeltong-running-records'
 const DRAFT_STORAGE_KEY = 'feeltong-running-draft'
-const ROUTE_SAMPLE_INTERVAL_MS = 30_000
+const ROUTE_SAMPLE_INTERVAL_MS = 5_000
+const POSITION_STATE_INTERVAL_MS = 3_000
 
 const createEmptyDraft = (): RunDraft => ({
   status: 'idle',
@@ -56,9 +57,21 @@ export default function useRunningTracking() {
   const [now, setNow] = useState(() => Date.now())
   const [notice, setNotice] = useState('GPS 권한 상태를 확인하는 중입니다.')
   const { permissionState, setPermissionState } = useGpsPermission()
+  const lastPositionUpdateRef = useRef(0)
 
   const elapsedMs = getElapsedMs(draft, now)
-  const distanceMeters = useMemo(() => getRouteDistanceMeters(draft.route), [draft.route])
+
+  const routeDistanceMeters = useMemo(() => getRouteDistanceMeters(draft.route), [draft.route])
+
+  const distanceMeters = useMemo(() => {
+    if (draft.status !== 'running' || !draft.currentPosition) {
+      return routeDistanceMeters
+    }
+    const lastPoint = draft.route.at(-1)
+    if (!lastPoint) return routeDistanceMeters
+    return routeDistanceMeters + getDistanceMeters(lastPoint, draft.currentPosition)
+  }, [routeDistanceMeters, draft.status, draft.currentPosition, draft.route])
+
   const averagePaceSeconds = useMemo(
     () => getAveragePaceSeconds(distanceMeters, elapsedMs),
     [distanceMeters, elapsedMs],
@@ -83,6 +96,9 @@ export default function useRunningTracking() {
 
   const handlePosition = useEffectEvent((position: GeolocationPosition) => {
     const point = toGeoPoint(position)
+    const now = Date.now()
+    const isThrottled = now - lastPositionUpdateRef.current < POSITION_STATE_INTERVAL_MS
+
     setPermissionState('granted')
 
     setDraft((previous) => {
@@ -91,15 +107,19 @@ export default function useRunningTracking() {
           ? [...previous.route, point]
           : previous.route
 
-      return {
-        ...previous,
-        currentPosition: point,
-        route,
+      if (isThrottled && route === previous.route) {
+        return previous
       }
+
+      return { ...previous, currentPosition: point, route }
     })
 
+    if (isThrottled) return
+
+    lastPositionUpdateRef.current = now
+
     if (draft.status === 'running') {
-      setNotice(`GPS 수신 중: ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`)
+      setNotice('GPS 수신 중')
       return
     }
 
