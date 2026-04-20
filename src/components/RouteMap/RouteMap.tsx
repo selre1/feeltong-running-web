@@ -2,7 +2,7 @@
 import type { Map as LeafletMap } from 'leaflet'
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import type { GeoPoint } from '../../types/run'
-import { DARK_TILE_SUBDOMAINS, DARK_TILE_URL, DEFAULT_ZOOM } from './leafletConfig'
+import { DEFAULT_ZOOM, TILE_SUBDOMAINS, TILE_URL } from './leafletConfig'
 import { createRunnerIcon, toLatLng } from './leafletHelpers'
 import RecenterMap from './RecenterMap'
 import { RoutePolylineLayer } from './RouteLayers'
@@ -59,7 +59,7 @@ export default function RouteMap({
         >
           <RecenterMap center={mapCenter} />
 
-          <TileLayer subdomains={DARK_TILE_SUBDOMAINS} url={DARK_TILE_URL} />
+          <TileLayer subdomains={TILE_SUBDOMAINS} url={TILE_URL} />
 
           <RoutePolylineLayer points={sampledRoute} />
 

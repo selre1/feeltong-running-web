@@ -13,6 +13,10 @@ const getPeriodStart = (period: PeriodKey) => {
   const current = new Date()
   current.setHours(0, 0, 0, 0)
 
+  if (period === 'today') {
+    return current.getTime()
+  }
+
   if (period === 'week') {
     // Monday-based week start (ko-KR UX expectation)
     const day = current.getDay()

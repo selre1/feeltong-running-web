@@ -98,6 +98,9 @@
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
+  background: rgba(10, 10, 22, 0.7);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .RunningPage__intro span,
@@ -170,7 +173,9 @@
   gap: 0;
   padding: 0;
   overflow: hidden;
-  background: transparent;
+  background: rgba(10, 10, 22, 0.7);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .RunningPage__heroStats,
@@ -277,7 +282,9 @@
   display: grid;
   gap: 0;
   padding: 0;
-  background: transparent;
+  background: rgba(10, 10, 22, 0.7);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .RunningPage__summaryItem {

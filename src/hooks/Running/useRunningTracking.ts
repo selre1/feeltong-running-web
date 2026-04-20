@@ -4,10 +4,11 @@ import { getAveragePaceSeconds, getDistanceMeters, getRouteDistanceMeters, toGeo
 import useGeolocation from './useGeolocation'
 import useGpsPermission from './useGpsPermission'
 
-const RECORDS_STORAGE_KEY = 'feeltong-running-records'
 const DRAFT_STORAGE_KEY = 'feeltong-running-draft'
 const ROUTE_SAMPLE_INTERVAL_MS = 5_000
 const POSITION_STATE_INTERVAL_MS = 3_000
+const MAX_ACCURACY_METERS = 50   // 오차 반경 50m 초과 시 무시
+const MAX_SPEED_MS = 8           // 8m/s ≈ 29km/h 초과 시 GPS 튐으로 판단
 
 const createEmptyDraft = (): RunDraft => ({
   status: 'idle',
@@ -45,15 +46,24 @@ const getElapsedMs = (draft: RunDraft, now: number) => {
 
 const shouldAppendPoint = (route: RunDraft['route'], point: RunDraft['route'][number]) => {
   const previous = route.at(-1)
-  if (!previous) {
-    return true
-  }
-  return point.timestamp - previous.timestamp >= ROUTE_SAMPLE_INTERVAL_MS
+  if (!previous) return true
+
+  if (point.timestamp - previous.timestamp < ROUTE_SAMPLE_INTERVAL_MS) return false
+
+  // 정확도 필터: 오차 반경이 너무 크면 제거
+  if (point.accuracy != null && point.accuracy > MAX_ACCURACY_METERS) return false
+
+  // 속도 스파이크 필터: 비현실적인 이동 속도면 GPS 튐으로 판단
+  const distM = getDistanceMeters(previous, point)
+  const elapsedSec = (point.timestamp - previous.timestamp) / 1000
+  if (elapsedSec > 0 && distM / elapsedSec > MAX_SPEED_MS) return false
+
+  return true
 }
 
 export default function useRunningTracking() {
   const [draft, setDraft] = useState<RunDraft>(() => parseStoredJson(DRAFT_STORAGE_KEY, createEmptyDraft()))
-  const [records, setRecords] = useState<RunRecord[]>(() => parseStoredJson(RECORDS_STORAGE_KEY, []))
+  const [records, setRecords] = useState<RunRecord[]>([])
   const [now, setNow] = useState(() => Date.now())
   const [notice, setNotice] = useState('GPS 권한 상태를 확인하는 중입니다.')
   const { permissionState, setPermissionState } = useGpsPermission()
@@ -76,11 +86,7 @@ export default function useRunningTracking() {
     () => getAveragePaceSeconds(distanceMeters, elapsedMs),
     [distanceMeters, elapsedMs],
   )
-  const canStartRun = permissionState === 'granted'
-
-  useEffect(() => {
-    window.localStorage.setItem(RECORDS_STORAGE_KEY, JSON.stringify(records))
-  }, [records])
+  const canStartRun = permissionState !== 'denied' && permissionState !== 'unsupported'
 
   useEffect(() => {
     window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft))
@@ -100,6 +106,9 @@ export default function useRunningTracking() {
     const isThrottled = now - lastPositionUpdateRef.current < POSITION_STATE_INTERVAL_MS
 
     setPermissionState('granted')
+
+    // 정확도가 너무 낮은 위치는 마커 및 경로 모두 무시
+    if (point.accuracy != null && point.accuracy > MAX_ACCURACY_METERS) return
 
     setDraft((previous) => {
       const route =
@@ -159,7 +168,7 @@ export default function useRunningTracking() {
     }
 
     if (permissionState === 'prompt') {
-      setNotice('GPS 권한이 필요합니다. 아래 버튼으로 위치 권한을 요청해 주세요.')
+      setNotice('GPS 권한이 필요합니다. 러닝 시작 버튼을 누르면 권한을 요청합니다.')
       return
     }
 

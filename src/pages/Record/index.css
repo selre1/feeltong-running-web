@@ -44,43 +44,43 @@
 
 .RecordPage__item {
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
 
 .RecordPage__dateLabel {
   color: var(--ui-color-text-secondary);
-  font-size: var(--ui-text-meta);
+  font-size: var(--ui-text-caption);
   line-height: 1.2;
-  padding: 0 2px;
+  padding: 0 4px;
 }
 
 .RecordPage__row {
   display: grid;
-  grid-template-columns: 124px minmax(0, 1fr);
-  gap: 12px;
-  align-items: center;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
   border-radius: var(--ui-radius-card);
+  padding: 0;
 }
 
 .RecordPage__thumb {
-  width: 124px;
-  height: 92px;
-  border-radius: var(--ui-radius-control);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(155deg, rgba(130, 150, 180, 0.5), rgba(95, 115, 145, 0.35)),
-    linear-gradient(35deg, rgba(60, 78, 106, 0.5), rgba(34, 46, 66, 0.35));
+  width: 112px;
+  height: 84px;
+  display: block;
+  flex-shrink: 0;
 }
 
 .RecordPage__content {
   display: grid;
-  gap: 4px;
+  align-content: center;
+  gap: 5px;
   min-width: 0;
+  padding: 12px 14px;
 }
 
 .RecordPage__distance {
   color: var(--ui-color-link);
-  font-size: var(--ui-text-metric);
+  font-size: var(--ui-text-body);
   line-height: 1;
   letter-spacing: -0.03em;
   font-weight: 700;
@@ -88,9 +88,9 @@
 
 .RecordPage__meta {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   color: var(--ui-color-text-secondary);
-  font-size: var(--ui-text-meta-small);
+  font-size: var(--ui-text-caption);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -119,26 +119,19 @@
   }
 
   .RecordPage__row {
-    grid-template-columns: 108px minmax(0, 1fr);
-    gap: 10px;
-    padding: 12px;
-  }
-
-  .RecordPage__dateLabel {
-    font-size: var(--ui-text-caption);
+    grid-template-columns: 96px minmax(0, 1fr);
   }
 
   .RecordPage__thumb {
-    width: 108px;
-    height: 82px;
+    width: 96px;
+    height: 72px;
   }
 
-  .RecordPage__distance {
-    font-size: var(--ui-text-metric-mobile);
+  .RecordPage__content {
+    padding: 10px 12px;
   }
 
   .RecordPage__meta {
-    gap: 8px;
-    font-size: var(--ui-text-caption);
+    gap: 6px;
   }
 }

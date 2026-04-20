@@ -1,32 +1,130 @@
 .MeetingPage {
   display: grid;
   gap: var(--ui-page-gap);
-  padding: var(--ui-page-padding-top) 0 12px;
+  padding: var(--ui-page-padding-top) 0 24px;
 }
 
-.MeetingPage .AdaptiveCard {
-  border-radius: var(--ui-radius-card);
-  border: var(--ui-border-muted);
-  background: var(--ui-surface-card);
-  box-shadow: none;
-  padding: var(--ui-card-padding);
+.MeetingPage__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.MeetingPage__createBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px 0 10px;
+  border-radius: 99px;
+  border: none;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  color: #fff;
+  font-size: var(--ui-text-caption);
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(255, 107, 107, 0.32);
+  transition: transform 100ms ease, opacity 150ms ease;
+}
+
+.MeetingPage__createBtn:active {
+  transform: scale(0.95);
+}
+
+.MeetingPage__createBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.MeetingPage__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .MeetingPage__empty {
   display: grid;
-  gap: 8px;
-  min-height: 180px;
+  gap: 6px;
+  min-height: 160px;
   align-content: center;
-}
-
-.MeetingPage__empty strong {
-  color: var(--ui-color-text-primary);
-  font-size: var(--ui-text-title);
-  line-height: 1.2;
+  text-align: center;
+  padding: var(--ui-card-padding);
+  border-radius: var(--ui-radius-card);
+  border: var(--ui-border-muted);
+  background: var(--ui-surface-card);
 }
 
 .MeetingPage__empty p {
   color: var(--ui-color-text-secondary);
   font-size: var(--ui-text-body);
   line-height: 1.6;
+}
+
+.MeetingPage__empty p:first-child {
+  color: var(--ui-color-text-primary);
+  font-weight: 700;
+}
+
+/* Delete confirm inline card */
+
+.MeetingPage__deleteConfirm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px var(--ui-card-padding);
+  border-radius: var(--ui-radius-card);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  background: rgba(255, 107, 107, 0.06);
+  animation: fadeIn 160ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.MeetingPage__deleteConfirm p {
+  font-size: var(--ui-text-body);
+  color: var(--ui-color-text-secondary);
+  line-height: 1.4;
+  min-width: 0;
+}
+
+.MeetingPage__deleteConfirm strong {
+  color: var(--ui-color-text-primary);
+}
+
+.MeetingPage__deleteActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.MeetingPage__confirmBtn {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 99px;
+  font-size: var(--ui-text-caption);
+  font-weight: 700;
+  border: none;
+  transition: transform 100ms ease;
+}
+
+.MeetingPage__confirmBtn:active {
+  transform: scale(0.95);
+}
+
+.MeetingPage__confirmBtn--cancel {
+  background: var(--ui-surface-control);
+  color: var(--ui-color-text-secondary);
+  border: var(--ui-border-muted);
+}
+
+.MeetingPage__confirmBtn--delete {
+  background: var(--ui-color-danger-soft);
+  color: var(--ui-color-danger);
+  border: 1px solid rgba(255, 107, 107, 0.25);
 }
