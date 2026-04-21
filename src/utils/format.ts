@@ -24,10 +24,13 @@ export const formatPace = (paceSeconds: number | null) => {
     return '--'
   }
 
+  // 30분/km 초과는 실질적으로 정지 상태 — 표시 의미 없음
+  if (paceSeconds > 1800) return '--'
+
   const normalizedSeconds = Math.round(paceSeconds)
   const minutes = Math.floor(normalizedSeconds / 60)
   const seconds = normalizedSeconds % 60
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}/km`
+  return `${minutes}'${String(seconds).padStart(2, '0')}"/km`
 }
 
 export const formatDate = (timestamp: number) =>
