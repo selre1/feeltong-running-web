@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import useDeviceType from '../../hooks/useDeviceType'
 
 interface ChatComposerProps {
   onSend: (content: string) => void
@@ -9,6 +10,7 @@ export default function ChatComposer({ onSend, onTyping }: ChatComposerProps) {
   const [input, setInput] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const lastTypingRef = useRef(0)
+  const deviceType = useDeviceType()
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
@@ -24,8 +26,7 @@ export default function ChatComposer({ onSend, onTyping }: ChatComposerProps) {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const isPointerDevice = window.matchMedia('(hover: hover) and (pointer: fine)').matches
-    if (e.key === 'Enter' && !e.shiftKey && isPointerDevice) {
+    if (e.key === 'Enter' && !e.shiftKey && deviceType === 'desktop') {
       e.preventDefault()
       handleSend()
     }
