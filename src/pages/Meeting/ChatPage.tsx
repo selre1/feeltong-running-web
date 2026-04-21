@@ -30,7 +30,6 @@ export default function ChatPage() {
 
   const handleLeave = async () => {
     await apiClient.post(`/rooms/${roomId}/leave`).catch(() => {})
-    navigate('/meeting')
   }
 
   const handleRoomUpdate = (data: { name: string; description: string }) => {
