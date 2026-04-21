@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext'
 const AuthPage = lazy(() => import('../../pages/Auth'))
 const HomePage = lazy(() => import('../../pages/Home'))
 const MeetingPage = lazy(() => import('../../pages/Meeting'))
+const MeetingChatPage = lazy(() => import('../../pages/Meeting/ChatPage'))
 const MyPage = lazy(() => import('../../pages/My'))
 const RecordPage = lazy(() => import('../../pages/Record'))
 const RunningPage = lazy(() => import('../../pages/Running'))
@@ -23,6 +24,7 @@ export default function AppRoutes() {
         <Route element={<RunningPage />} path="/running" />
         <Route element={<RecordPage />} path="/record" />
         <Route element={<MeetingPage />} path="/meeting" />
+        <Route element={<MeetingChatPage />} path="/meeting/:roomId" />
         <Route element={<MyPage />} path="/my" />
         <Route element={<HomePage />} path="*" />
       </Routes>

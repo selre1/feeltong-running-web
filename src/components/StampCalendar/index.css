@@ -1,6 +1,6 @@
 .StampCalendar {
-  padding: 0 0 24px;
-  border-radius: 30px;
+  padding: 0 0 18px;
+  border-radius: 22px;
   background:
     radial-gradient(circle at top, rgba(255, 170, 118, 0.18), transparent 36%),
     linear-gradient(180deg, #231711 0%, #16100d 100%);
@@ -13,24 +13,24 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 24px 16px 16px;
+  padding: 18px 14px 12px;
 }
 
 .StampCalendar__header strong {
   color: #fff;
-  font-size: 22px;
+  font-size: 17px;
   line-height: 1.2;
   font-weight: 700;
 }
 
 .StampCalendar__navButton {
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  font-size: 30px;
+  font-size: 22px;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -49,13 +49,13 @@
 }
 
 .StampCalendar__weekdays {
-  padding: 8px 12px 4px;
+  padding: 6px 10px 2px;
 }
 
 .StampCalendar__weekdays span {
   text-align: center;
-  color: rgba(255, 255, 255, 0.42);
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 11px;
   line-height: 1;
   font-weight: 600;
   padding: 4px 0;
@@ -79,7 +79,7 @@
 }
 
 .StampCalendar__grid {
-  padding: 0 12px;
+  padding: 0 10px;
 }
 
 .StampCalendar__cell:hover {
@@ -105,10 +105,10 @@
 
 .StampCalendar__date {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 13px;
+  top: 6px;
+  left: 6px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
   line-height: 1;
 }
 
@@ -116,33 +116,33 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   color: rgba(255, 107, 107, 1);
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 900;
   font-style: italic;
   letter-spacing: 0.14em;
   transform: rotate(-16deg);
-  margin-top: 9px;
+  margin-top: 6px;
 }
 
 .StampCalendar__footer {
-  padding: 24px 16px 0;
+  padding: 16px 14px 0;
 }
 
 .StampCalendar__todayButton {
   width: 100%;
-  padding: 18px;
+  padding: 14px;
   border: none;
-  border-radius: 16px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
   color: #fff;
-  font-size: 17px;
+  font-size: 14px;
   line-height: 1.2;
   font-weight: 700;
-  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.36);
   transition:
     transform 120ms ease,
     box-shadow 120ms ease,
@@ -170,24 +170,16 @@
 
 @media (max-width: 380px) {
   .StampCalendar__header strong {
-    font-size: 19px;
+    font-size: 15px;
   }
 
   .StampCalendar__navButton {
-    width: 40px;
-    height: 40px;
-    font-size: 26px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
   }
 
   .StampCalendar__cell {
-    border-radius: 10px;
-  }
-
-  .StampCalendar__stamp {
-    min-width: 36px;
-    height: 22px;
-    padding: 0 7px;
-    margin-top: 8px;
-    font-size: 10px;
+    border-radius: 8px;
   }
 }

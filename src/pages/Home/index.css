@@ -1,70 +1,173 @@
-.HomePage {
-  display: grid;
-  gap: 22px;
-  padding: 30px 0 12px;
+/* ===== Hero ===== */
+
+.HomeHero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
-.HomePage__section {
-  display: grid;
-  gap: 16px;
+.HomeHero__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at -10% 110%, rgba(255, 107, 107, 0.22) 0%, transparent 52%),
+    radial-gradient(ellipse at 110% -10%, rgba(51, 146, 255, 0.14) 0%, transparent 48%),
+    linear-gradient(180deg, #11111e 0%, #0c0c18 100%);
 }
 
-.HomePage__sectionTop {
+.HomeHero__topBar {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  padding-top: max(env(safe-area-inset-top), 14px);
+  padding-bottom: 0;
 }
 
-.HomePage__sectionLabel {
-  margin-bottom: 6px;
-  color: var(--theme-accent);
-  font-size: 13px;
-  line-height: 15px;
+.HomeHero__brand {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.HomeHero__recordBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 99px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
   font-weight: 700;
+  padding: 6px 14px;
+  transition: border-color 150ms ease, color 150ms ease;
 }
 
-.HomePage__stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+.HomeHero__recordBtn:active {
+  color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-.HomePage__statCard {
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+@media (hover: hover) {
+  .HomeHero__recordBtn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
 }
 
-.HomePage__statCard span {
-  color: var(--theme-text-faint);
-  font-size: 13px;
-  line-height: 15px;
+.HomeHero__body {
+  padding: 36px 0 32px;
+}
+
+.HomeHero__date {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
 }
 
-.HomePage__statCard strong {
-  color: var(--theme-text);
-  font-size: 26px;
-  line-height: 1.05;
+.HomeHero__title {
+  color: #fff;
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1.06;
   letter-spacing: -0.04em;
 }
 
-.HomePage__statCard--accent {
-  background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-2) 100%);
+.HomeHero__cta {
+  width: 100%;
+  min-height: 58px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  border-radius: 16px;
+  margin-bottom: 36px;
 }
 
-.HomePage__statCard--accent span,
-.HomePage__statCard--accent strong {
+/* ===== Page body ===== */
+
+.HomePage {
+  display: grid;
+  gap: 20px;
+  padding: 0 0 16px;
+}
+
+/* ===== Stats ===== */
+
+.HomePage__stats {
+  display: grid;
+  gap: 0;
+  padding-top: 6px;
+}
+
+.HomePage__distHero {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 28px 0 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.HomePage__distValue {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
   color: #fff;
 }
 
+.HomePage__distUnit {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: -0.02em;
+  padding-bottom: 4px;
+}
 
-@media (max-width: 420px) {
-  .HomePage__sectionTop {
-    flex-direction: column;
-    align-items: stretch;
+.HomePage__statsStrip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding-top: 18px;
+}
+
+.HomePage__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.HomePage__stat + .HomePage__stat {
+  padding-left: 18px;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.HomePage__stat strong {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.HomePage__stat span {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.32);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 380px) {
+  .HomeHero__title {
+    font-size: 44px;
+  }
+
+  .HomePage__distValue {
+    font-size: 52px;
+  }
+
+  .HomePage__stat strong {
+    font-size: 17px;
   }
 }
- 

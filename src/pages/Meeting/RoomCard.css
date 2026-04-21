@@ -1,0 +1,155 @@
+.RoomCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px 12px;
+  border-radius: var(--ui-radius-card);
+  border: var(--ui-border-muted);
+  background: var(--ui-surface-card);
+  transition: border-color 150ms ease;
+}
+
+/* 방 이름 + 배지 — flex-1 로 남은 공간 차지 */
+.RoomCard__title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.RoomCard__name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--ui-text-body);
+  font-weight: 700;
+  color: var(--ui-color-text-primary);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.RoomCard__badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 99px;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.RoomCard__badge--joined {
+  background: rgba(255, 107, 107, 0.14);
+  color: var(--ui-color-accent);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+}
+
+.RoomCard__badge--owner {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ui-color-text-tertiary);
+  border: var(--ui-border-muted);
+}
+
+/* 하단 행: info 좌측, actions 우측 */
+.RoomCard__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* 인원수 · 작성자 · 날짜 */
+.RoomCard__info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.RoomCard__memberCount {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--ui-text-caption);
+  font-weight: 700;
+  color: var(--ui-color-text-tertiary);
+  white-space: nowrap;
+}
+
+.RoomCard__memberCount svg {
+  width: 12px;
+  height: 12px;
+}
+
+.RoomCard__dot {
+  font-size: var(--ui-text-caption);
+  color: var(--ui-color-text-tertiary);
+  opacity: 0.5;
+}
+
+.RoomCard__creator {
+  font-size: var(--ui-text-caption);
+  color: var(--ui-color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* 액션 버튼 영역 */
+.RoomCard__actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.RoomCard__iconBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: var(--ui-border-muted);
+  background: var(--ui-surface-control-muted);
+  color: var(--ui-color-text-tertiary);
+  display: grid;
+  place-items: center;
+  transition: background 150ms ease, color 150ms ease, transform 100ms ease;
+}
+
+.RoomCard__iconBtn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.RoomCard__iconBtn:active {
+  transform: scale(0.9);
+}
+
+.RoomCard__iconBtn--danger {
+  color: var(--ui-color-danger);
+}
+
+.RoomCard__btn {
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 99px;
+  font-size: var(--ui-text-caption);
+  font-weight: 700;
+  border: none;
+  transition: opacity 150ms ease, transform 100ms ease;
+  white-space: nowrap;
+}
+
+.RoomCard__btn:active {
+  transform: scale(0.95);
+}
+
+.RoomCard__btn--enter {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+}
+
+.RoomCard__btn--join {
+  background: var(--ui-surface-control);
+  color: var(--ui-color-text-primary);
+  border: var(--ui-border-soft);
+}

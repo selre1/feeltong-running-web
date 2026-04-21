@@ -1,0 +1,132 @@
+.RoomForm__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.64);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  animation: fadeIn 200ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.RoomForm__sheet {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  background: var(--theme-bg-elevated);
+  border-radius: 24px 24px 0 0;
+  padding: 12px 24px max(24px, env(safe-area-inset-bottom));
+  animation: slideUp 260ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.RoomForm__handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--ui-color-divider);
+  margin: 0 auto 20px;
+}
+
+.RoomForm__title {
+  font-size: var(--ui-text-title);
+  font-weight: 800;
+  color: var(--ui-color-text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.RoomForm__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.RoomForm__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.RoomForm__label {
+  font-size: var(--ui-text-caption);
+  font-weight: 700;
+  color: var(--ui-color-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.RoomForm__optional {
+  font-weight: 400;
+  color: var(--ui-color-text-tertiary);
+  margin-left: 4px;
+}
+
+.RoomForm__input {
+  background: var(--ui-surface-control);
+  border: var(--ui-border-soft);
+  border-radius: var(--ui-radius-control);
+  padding: 12px 14px;
+  color: var(--ui-color-text-primary);
+  font-size: var(--ui-text-body);
+  outline: none;
+  transition: border-color 150ms ease;
+  width: 100%;
+}
+
+.RoomForm__input::placeholder {
+  color: var(--ui-color-text-tertiary);
+}
+
+.RoomForm__input:focus {
+  border-color: rgba(255, 107, 107, 0.5);
+}
+
+.RoomForm__input--textarea {
+  resize: none;
+  line-height: 1.5;
+}
+
+.RoomForm__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.RoomForm__btn {
+  flex: 1;
+  height: 48px;
+  border-radius: var(--ui-radius-button);
+  font-size: var(--ui-text-body);
+  font-weight: 700;
+  border: none;
+  transition: opacity 150ms ease, transform 100ms ease;
+}
+
+.RoomForm__btn:active {
+  transform: scale(0.97);
+}
+
+.RoomForm__btn--cancel {
+  background: var(--ui-surface-control);
+  color: var(--ui-color-text-secondary);
+  border: var(--ui-border-muted);
+}
+
+.RoomForm__btn--submit {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(255, 107, 107, 0.32);
+}
+
+.RoomForm__btn--submit:disabled {
+  opacity: 0.4;
+  box-shadow: none;
+}

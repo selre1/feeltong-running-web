@@ -53,31 +53,27 @@ export default function Header(props: HeaderProps) {
     return (
       <header className="HomeHeader">
         <div className="HomeHeader__background" aria-hidden="true" />
-        <div className="HomeHeader__overlay" aria-hidden="true" />
         <AdaptiveDiv type="center">
           <div className="HomeHeader__content">
-            <div className="HomeHeader__brand">
-              <div className="HomeHeader__logoMark" aria-hidden="true">
-                <BrandMark />
+            <div className="HomeHeader__top">
+              <div className="HomeHeader__brand">
+                <div className="HomeHeader__logoMark" aria-hidden="true">
+                  <BrandMark />
+                </div>
+                <strong className="HomeHeader__brandName">Feeltong</strong>
               </div>
-              <strong className="HomeHeader__brandName">Feeltong Running</strong>
-            </div>
-
-            <div className="HomeHeader__copy">
-              <h1 className="HomeHeader__title">{props.title}</h1>
-              <p className="HomeHeader__subtitle">{props.subtitle}</p>
-            </div>
-
-            <div className="HomeHeader__actions">
-              <Button className="HomeHeader__button" onClick={props.onPrimaryAction} variant="purple">
-                {props.primaryActionLabel}
-              </Button>
               {props.onSecondaryAction && props.secondaryActionLabel ? (
-                <Button className="HomeHeader__button" onClick={props.onSecondaryAction} variant="white">
+                <Button className="HomeHeader__secondaryBtn" onClick={props.onSecondaryAction} variant="white">
                   {props.secondaryActionLabel}
                 </Button>
               ) : null}
             </div>
+
+            <h1 className="HomeHeader__title">{props.title}</h1>
+
+            <Button className="HomeHeader__primaryBtn" onClick={props.onPrimaryAction} variant="purple">
+              {props.primaryActionLabel}
+            </Button>
           </div>
         </AdaptiveDiv>
       </header>

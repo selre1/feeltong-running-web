@@ -60,7 +60,6 @@ export default function RecordPage() {
                   <div className="RecordPage__meta">
                     <span>{formatDuration(record.durationMs)}</span>
                     <span>{formatPace(record.averagePaceSeconds)}</span>
-                    <span>{recordCopy.pointLabel(record.route.length)}</span>
                   </div>
                 </div>
               </AdaptiveCard>

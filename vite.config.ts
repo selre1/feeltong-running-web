@@ -17,9 +17,14 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       proxy: {
         '/api': {
-          target: env.APP_BACK_URL ?? 'http://localhost:8080',
+          target: 'http://localhost:8080',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+        '/ws': {
+          target: 'http://localhost:8080',
+          changeOrigin: true,
+          ws: true,
         },
       },
     },
