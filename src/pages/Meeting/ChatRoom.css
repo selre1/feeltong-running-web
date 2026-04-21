@@ -3,7 +3,7 @@
 .ChatRoom {
   position: fixed;
   top: max(6px, env(safe-area-inset-top));
-  bottom: calc(74px + env(safe-area-inset-bottom) + 14px);
+  bottom: env(safe-area-inset-bottom, 0px);
   left: 50%;
   transform: translateX(-50%);
   width: min(430px, 100%);

@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from '../../contexts/AuthContext'
 import { RunningProvider, useRunning } from '../../contexts/RunningContext'
 import Header from '../Header'
@@ -10,12 +11,17 @@ const Container = ({ children }: { children: ReactNode }) => <div className="Ske
 
 function SkeletonApp() {
   const { isRunningActive } = useRunning()
+  const { pathname } = useLocation()
+  // 채팅 페이지(/meeting/:roomId)에서는 Navigation 숨김 — 러닝과 동일한 패턴
+  const isChatPage = /^\/meeting\/.+/.test(pathname)
+  const showNav = !isRunningActive && !isChatPage
+
   return (
     <Container>
       <Header variant="bar" />
       <AppRoutes />
-      {!isRunningActive ? <Navigation /> : null}
-      {!isRunningActive ? <div className="SkeletonNavSpacer" /> : null}
+      {showNav ? <Navigation /> : null}
+      {showNav ? <div className="SkeletonNavSpacer" /> : null}
     </Container>
   )
 }
