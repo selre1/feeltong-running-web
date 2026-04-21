@@ -6,21 +6,153 @@
   overflow: hidden;
 }
 
+/* ===== Full-bleed animated background ===== */
+
 .HomeHero__bg {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at -10% 110%, rgba(255, 107, 107, 0.22) 0%, transparent 52%),
-    radial-gradient(ellipse at 110% -10%, rgba(51, 146, 255, 0.14) 0%, transparent 48%),
-    linear-gradient(180deg, #11111e 0%, #0c0c18 100%);
+  background: linear-gradient(160deg, #0e0e1a 0%, #0a0a12 100%);
+  overflow: hidden;
 }
 
+.HomeHero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  pointer-events: none;
+}
+
+.HomeHero__blob--1 {
+  width: 70vw; height: 70vw;
+  max-width: 520px; max-height: 520px;
+  background: radial-gradient(circle, rgba(238, 92, 37, 0.38) 0%, transparent 70%);
+  top: -35%; left: -15%;
+  animation: heroBlobDrift1 12s ease-in-out infinite alternate;
+}
+
+.HomeHero__blob--2 {
+  width: 50vw; height: 50vw;
+  max-width: 360px; max-height: 360px;
+  background: radial-gradient(circle, rgba(255, 100, 100, 0.22) 0%, transparent 70%);
+  top: -10%; right: -10%;
+  animation: heroBlobDrift2 15s ease-in-out infinite alternate;
+}
+
+.HomeHero__blob--3 {
+  width: 40vw; height: 40vw;
+  max-width: 280px; max-height: 280px;
+  background: radial-gradient(circle, rgba(255, 160, 50, 0.16) 0%, transparent 70%);
+  bottom: 0; left: 35%;
+  animation: heroBlobDrift3 9s ease-in-out infinite alternate;
+}
+
+@keyframes heroBlobDrift1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(6vw, 4vw) scale(1.1); }
+}
+@keyframes heroBlobDrift2 {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(-5vw, 6vw) scale(0.9); }
+}
+@keyframes heroBlobDrift3 {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(4vw, -3vw) scale(1.1); }
+}
+
+.HomeHero__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(238, 92, 37, 0.65);
+  pointer-events: none;
+  animation: heroParticleRise linear infinite;
+}
+
+.HomeHero__particle--1 { width: 3px; height: 3px; left: 12%; bottom: 10%; animation-duration: 6s;  animation-delay: 0s; }
+.HomeHero__particle--2 { width: 4px; height: 4px; left: 38%; bottom: 6%;  animation-duration: 8s;  animation-delay: -2s; }
+.HomeHero__particle--3 { width: 3px; height: 3px; left: 62%; bottom: 14%; animation-duration: 7s;  animation-delay: -4s; }
+.HomeHero__particle--4 { width: 4px; height: 4px; left: 84%; bottom: 8%;  animation-duration: 9s;  animation-delay: -1s; }
+
+@keyframes heroParticleRise {
+  0%   { transform: translateY(0) scale(1);    opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 0.5; }
+  100% { transform: translateY(-220px) scale(0.3); opacity: 0; }
+}
+
+/* ===== Beating heart ===== */
+
+.HomeHero__heartStage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 260px;
+  height: 260px;
+}
+
+/* Ripple rings that expand outward on each beat */
+.HomeHero__heartRing {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(238, 92, 37, 0.45);
+  animation: heartRingExpand 1.2s ease-out infinite;
+}
+
+.HomeHero__heartRing--1 { width: 130px; height: 130px; animation-delay: 0.0s; }
+.HomeHero__heartRing--2 { width: 130px; height: 130px; animation-delay: 0.4s; }
+.HomeHero__heartRing--3 { width: 130px; height: 130px; animation-delay: 0.8s; }
+
+@keyframes heartRingExpand {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Heart SVG — lub-dub double beat */
+.HomeHero__heart {
+  position: relative;
+  z-index: 1;
+  width: 120px;
+  height: 108px;
+  opacity: 0.22;
+  filter: drop-shadow(0 0 24px rgba(238, 92, 37, 0.7)) drop-shadow(0 0 48px rgba(238, 92, 37, 0.35));
+  animation: heartLubDub 1.2s ease-in-out infinite;
+  transform-origin: center 55%;
+}
+
+@keyframes heartLubDub {
+  0%   { transform: scale(1);    opacity: 0.22; }
+  10%  { transform: scale(1.18); opacity: 0.34; }  /* lub */
+  20%  { transform: scale(1.02); opacity: 0.24; }
+  30%  { transform: scale(1.12); opacity: 0.30; }  /* dub */
+  50%  { transform: scale(1);    opacity: 0.22; }
+  100% { transform: scale(1);    opacity: 0.22; }
+}
+
+/* ===== Content (centered, unchanged) ===== */
+
 .HomeHero__topBar {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-top: max(env(safe-area-inset-top), 14px);
-  padding-bottom: 0;
+}
+
+.HomeHero__brandRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.HomeHero__brandLogo {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  object-fit: contain;
 }
 
 .HomeHero__brand {
@@ -54,6 +186,8 @@
 }
 
 .HomeHero__body {
+  position: relative;
+  z-index: 1;
   padding: 36px 0 32px;
 }
 
@@ -71,9 +205,12 @@
   font-weight: 800;
   line-height: 1.06;
   letter-spacing: -0.04em;
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.5);
 }
 
 .HomeHero__cta {
+  position: relative;
+  z-index: 1;
   width: 100%;
   min-height: 58px;
   font-size: 16px;
@@ -156,18 +293,20 @@
   text-transform: uppercase;
 }
 
-/* ===== Responsive ===== */
+/* ===== Small screen ===== */
 
 @media (max-width: 380px) {
-  .HomeHero__title {
-    font-size: 44px;
-  }
+  .HomeHero__title    { font-size: 44px; }
+  .HomePage__distValue { font-size: 52px; }
+  .HomePage__stat strong { font-size: 17px; }
+}
 
-  .HomePage__distValue {
-    font-size: 52px;
-  }
+/* ===== Desktop: heart slightly larger ===== */
 
-  .HomePage__stat strong {
-    font-size: 17px;
-  }
+@media (min-width: 768px) {
+  .HomeHero__heartStage { width: 380px; height: 380px; }
+  .HomeHero__heart      { width: 170px; height: 153px; }
+  .HomeHero__heartRing--1,
+  .HomeHero__heartRing--2,
+  .HomeHero__heartRing--3 { width: 190px; height: 190px; }
 }
