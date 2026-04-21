@@ -4,6 +4,17 @@
   padding: var(--ui-page-padding-top) 0 24px;
 }
 
+.MeetingPage__status {
+  color: var(--ui-color-text-tertiary);
+  font-size: var(--ui-text-caption);
+  text-align: center;
+  padding: 8px 0;
+}
+
+.MeetingPage__status--error {
+  color: var(--ui-color-danger);
+}
+
 .MeetingPage__header {
   display: flex;
   align-items: flex-end;
@@ -41,7 +52,50 @@
 .MeetingPage__list {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+}
+
+/* Operation error toast */
+
+.MeetingPage__opError {
+  position: fixed;
+  bottom: calc(74px + env(safe-area-inset-bottom) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ui-color-danger);
+  color: #fff;
+  font-size: var(--ui-text-caption);
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 99px;
+  white-space: nowrap;
+  z-index: 100;
+  animation: fadeIn 200ms ease, fadeOut 200ms ease 2.8s forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateX(-50%) translateY(4px); }
+}
+
+/* List load error row */
+
+.MeetingPage__errorRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
+}
+
+.MeetingPage__retryBtn {
+  font-size: var(--ui-text-caption);
+  font-weight: 700;
+  color: var(--ui-color-accent);
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .MeetingPage__empty {

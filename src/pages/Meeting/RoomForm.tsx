@@ -25,7 +25,10 @@ export default function RoomForm({ room, onClose, onSubmit }: RoomFormProps) {
   }
 
   const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) onClose()
+    if (e.target !== e.currentTarget) return
+    const isDirty = name !== (room?.name ?? '') || description !== (room?.description ?? '')
+    if (isDirty && !window.confirm('입력한 내용이 사라집니다. 닫으시겠어요?')) return
+    onClose()
   }
 
   return (
