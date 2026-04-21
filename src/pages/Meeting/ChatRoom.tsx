@@ -9,8 +9,6 @@ import type { MeetingRoom } from './types'
 import useChatRoom from './useChatRoom'
 import './ChatRoom.css'
 
-const NAV_BAR_HEIGHT = 88 // navigation bar + safe-area clearance
-
 interface ChatRoomProps {
   currentUser: SessionUser
   onLeave?: () => Promise<void> | void
