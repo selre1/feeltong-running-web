@@ -13,6 +13,7 @@ export default function useChatRoom(roomId: string) {
   const [loadingMore, setLoadingMore] = useState(false)
   const [typers, setTypers] = useState<Map<string, string>>(new Map())
   const [onlineCount, setOnlineCount] = useState(0)
+  const [sessionExpired, setSessionExpired] = useState(false)
 
   const wsRef = useRef<WebSocket | null>(null)
   const retryRef = useRef(0)
@@ -29,12 +30,34 @@ export default function useChatRoom(roomId: string) {
       retryTimerRef.current = setTimeout(connect, delay)
     }
 
-    function connect() {
+    async function connect() {
       if (destroyed) return
+
+      // 토큰 발급 — /api rewrite를 통해 same-origin으로 전달되므로 쿠키 정상 전송
+      let token: string
+      try {
+        const res = await apiClient.post<{ token: string }>('/auth/ws-token')
+        token = res.data.token
+      } catch (err: unknown) {
+        if (destroyed) return
+        const status = (err as { response?: { status?: number } })?.response?.status
+        if (status === 401) {
+          // 세션 만료 — 재연결 중단
+          setSessionExpired(true)
+          setConnected(false)
+          return
+        }
+        // 그 외 네트워크 오류 — 재연결 예약
+        scheduleReconnect()
+        return
+      }
+
+      if (destroyed) return
+
       const backUrl = import.meta.env.APP_BACK_WS_URL ?? ''
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
       const wsHost = backUrl ? backUrl.replace(/^(https?|wss?):\/\//, '') : window.location.host
-      const ws = new WebSocket(`${protocol}//${wsHost}/ws/rooms/${roomId}`)
+      const ws = new WebSocket(`${protocol}//${wsHost}/ws/rooms/${roomId}?token=${token}`)
       wsRef.current = ws
 
       ws.onopen = () => {
@@ -139,6 +162,7 @@ export default function useChatRoom(roomId: string) {
     messages,
     connected,
     onlineCount,
+    sessionExpired,
     typers,
     hasMore,
     loadingMore,

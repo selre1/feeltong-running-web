@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { SessionUser } from '../../hooks/useAuthSession'
 import ChatComposer from './ChatComposer'
@@ -22,6 +22,7 @@ export default function ChatRoom({ currentUser, onLeave, onRoomUpdate, room }: C
     messages,
     connected,
     onlineCount,
+    sessionExpired,
     typers,
     hasMore,
     loadingMore,
@@ -29,6 +30,10 @@ export default function ChatRoom({ currentUser, onLeave, onRoomUpdate, room }: C
     sendTyping,
     loadMore,
   } = useChatRoom(room.id)
+
+  useEffect(() => {
+    if (sessionExpired) navigate('/auth')
+  }, [sessionExpired, navigate])
   const [showEditForm, setShowEditForm] = useState(false)
 
   const isOwner = room.creatorId === currentUser.id
