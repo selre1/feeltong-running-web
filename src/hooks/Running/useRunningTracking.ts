@@ -157,6 +157,12 @@ export default function useRunningTracking() {
   }, [draft.status, permissionState, requestCurrentPosition])
 
   useEffect(() => {
+    // 위치를 이미 받았으면 permission API 상태와 무관하게 GPS 정상 작동 중
+    if (draft.currentPosition !== null && draft.status === 'idle') {
+      setNotice('GPS 허용됨: 러닝을 시작할 수 있습니다.')
+      return
+    }
+
     if (permissionState === 'granted' && draft.status === 'idle') {
       setNotice('GPS 허용됨: 러닝을 시작할 수 있습니다.')
       return
@@ -176,7 +182,10 @@ export default function useRunningTracking() {
       setNotice('이 브라우저는 위치 기능을 지원하지 않습니다.')
       return
     }
-  }, [draft.status, permissionState])
+
+    // 'unknown' — permissions API 미지원(iOS Safari) 또는 아직 확인 중
+    setNotice('GPS 권한 상태를 확인하는 중입니다.')
+  }, [draft.status, draft.currentPosition, permissionState])
 
   useEffect(() => {
     if (draft.status === 'idle') {
