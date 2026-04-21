@@ -7,8 +7,9 @@ import useGpsPermission from './useGpsPermission'
 const DRAFT_STORAGE_KEY = 'feeltong-running-draft'
 const ROUTE_SAMPLE_INTERVAL_MS = 5_000
 const POSITION_STATE_INTERVAL_MS = 3_000
-const MAX_ACCURACY_METERS = 50   // 오차 반경 50m 초과 시 무시
+const MAX_ACCURACY_METERS = 30   // 오차 반경 30m 초과 시 무시
 const MAX_SPEED_MS = 8           // 8m/s ≈ 29km/h 초과 시 GPS 튐으로 판단
+const MIN_DISTANCE_METERS = 8    // 8m 미만 이동은 GPS 드리프트로 간주, 경로에 추가 안 함
 
 const createEmptyDraft = (): RunDraft => ({
   status: 'idle',
@@ -53,8 +54,12 @@ const shouldAppendPoint = (route: RunDraft['route'], point: RunDraft['route'][nu
   // 정확도 필터: 오차 반경이 너무 크면 제거
   if (point.accuracy != null && point.accuracy > MAX_ACCURACY_METERS) return false
 
-  // 속도 스파이크 필터: 비현실적인 이동 속도면 GPS 튐으로 판단
   const distM = getDistanceMeters(previous, point)
+
+  // 최소 이동 거리 필터: GPS 드리프트(정지 중 좌표 흔들림) 제거
+  if (distM < MIN_DISTANCE_METERS) return false
+
+  // 속도 스파이크 필터: 비현실적인 이동 속도면 GPS 튐으로 판단
   const elapsedSec = (point.timestamp - previous.timestamp) / 1000
   if (elapsedSec > 0 && distM / elapsedSec > MAX_SPEED_MS) return false
 
@@ -79,7 +84,9 @@ export default function useRunningTracking() {
     }
     const lastPoint = draft.route.at(-1)
     if (!lastPoint) return routeDistanceMeters
-    return routeDistanceMeters + getDistanceMeters(lastPoint, draft.currentPosition)
+    const delta = getDistanceMeters(lastPoint, draft.currentPosition)
+    // 드리프트 노이즈 제거: 경로 포인트 기준과 동일한 최소 거리 적용
+    return routeDistanceMeters + (delta >= MIN_DISTANCE_METERS ? delta : 0)
   }, [routeDistanceMeters, draft.status, draft.currentPosition, draft.route])
 
   const averagePaceSeconds = useMemo(

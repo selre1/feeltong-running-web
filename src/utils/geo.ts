@@ -29,7 +29,8 @@ export const getRouteDistanceMeters = (route: GeoPointLike[]) =>
   }, 0)
 
 export const getAveragePaceSeconds = (distanceMeters: number, durationMs: number) => {
-  if (distanceMeters < 1 || durationMs < 1) {
+  // 50m 미만은 유효한 페이스 계산 불가 (GPS 드리프트 오차 범위)
+  if (distanceMeters < 50 || durationMs < 1) {
     return null
   }
 
