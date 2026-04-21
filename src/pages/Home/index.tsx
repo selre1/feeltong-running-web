@@ -33,10 +33,61 @@ export default function HomePage() {
   return (
     <>
       <section className="HomeHero">
-        <div className="HomeHero__bg" aria-hidden="true" />
+        {/* Full-bleed animated background */}
+        <div className="HomeHero__bg" aria-hidden="true">
+          <div className="HomeHero__blob HomeHero__blob--1" />
+          <div className="HomeHero__blob HomeHero__blob--2" />
+          <div className="HomeHero__blob HomeHero__blob--3" />
+          <div className="HomeHero__particle HomeHero__particle--1" />
+          <div className="HomeHero__particle HomeHero__particle--2" />
+          <div className="HomeHero__particle HomeHero__particle--3" />
+          <div className="HomeHero__particle HomeHero__particle--4" />
+
+          {/* Beating heart — decorative, centered in bg */}
+          <div className="HomeHero__heartStage">
+            <div className="HomeHero__heartRing HomeHero__heartRing--1" />
+            <div className="HomeHero__heartRing HomeHero__heartRing--2" />
+            <div className="HomeHero__heartRing HomeHero__heartRing--3" />
+            <svg className="HomeHero__heart" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient cx="50%" cy="35%" id="hg" r="65%">
+                  <stop offset="0%" stopColor="#ff9a6c" />
+                  <stop offset="55%" stopColor="#ee5c25" />
+                  <stop offset="100%" stopColor="#c73e0e" />
+                </radialGradient>
+                <filter id="hglow">
+                  <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="3" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <path
+                d="M50 82 C22 65 4 52 4 34 A24 24 0 0 1 50 17 A24 24 0 0 1 96 34 C96 52 78 65 50 82Z"
+                fill="url(#hg)"
+                filter="url(#hglow)"
+              />
+              {/* Inner highlight */}
+              <path
+                d="M38 28 C36 24 40 20 46 22 C42 24 40 28 42 32"
+                fill="none"
+                opacity="0.45"
+                stroke="white"
+                strokeLinecap="round"
+                strokeWidth="3"
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* Centered content — same as before */}
         <AdaptiveDiv type="center">
           <div className="HomeHero__topBar">
-            <strong className="HomeHero__brand">FEELTONG</strong>
+            <div className="HomeHero__brandRow">
+              <img alt="" className="HomeHero__brandLogo" src="/favicon.svg" />
+              <strong className="HomeHero__brand">FEELTONG</strong>
+            </div>
             {isAuthenticated ? (
               <button className="HomeHero__recordBtn" onClick={openRecords} type="button">
                 기록 보기
