@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { SessionUser } from '../../hooks/useAuthSession'
-import useDeviceType from '../../hooks/useDeviceType'
 import ChatComposer from './ChatComposer'
 import ChatMessageList from './ChatMessageList'
 import ChatRoomHeader from './ChatRoomHeader'
@@ -19,8 +18,6 @@ interface ChatRoomProps {
 
 export default function ChatRoom({ currentUser, onLeave, onRoomUpdate, room }: ChatRoomProps) {
   const navigate = useNavigate()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const deviceType = useDeviceType()
   const {
     messages,
     connected,
@@ -39,33 +36,11 @@ export default function ChatRoom({ currentUser, onLeave, onRoomUpdate, room }: C
     if (sessionExpired) navigate('/auth')
   }, [sessionExpired, navigate])
 
-  // 모바일/태블릿 가상 키보드 대응: visualViewport offset 기반으로 bottom 조정
+  // 채팅방 마운트 시 body 스크롤 잠금 — iOS rubber-band 오버스크롤 방지
   useEffect(() => {
-    if (deviceType === 'desktop') return
-    const el = containerRef.current
-    const vv = window.visualViewport
-    if (!el || !vv) return
-
-    const sync = () => {
-      // visualViewport.offsetTop: 키보드가 올라올수록 양수값이 됨
-      // window.innerHeight - vv.height - vv.offsetTop = 키보드 높이
-      const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop
-      if (keyboardHeight > 50) {
-        el.style.bottom = `${keyboardHeight}px`
-      } else {
-        el.style.bottom = ''
-      }
-    }
-
-    vv.addEventListener('resize', sync)
-    vv.addEventListener('scroll', sync)
-    sync()
-
-    return () => {
-      vv.removeEventListener('resize', sync)
-      vv.removeEventListener('scroll', sync)
-      el.style.bottom = ''
-    }
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
   }, [])
 
   const isOwner = room.creatorId === currentUser.id
@@ -83,7 +58,7 @@ export default function ChatRoom({ currentUser, onLeave, onRoomUpdate, room }: C
 
   return (
     <>
-      <div ref={containerRef} className="ChatRoom">
+      <div className="ChatRoom">
         <ChatRoomHeader
           connected={connected}
           isOwner={isOwner}

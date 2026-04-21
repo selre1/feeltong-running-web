@@ -92,6 +92,8 @@ body,
 
 html {
   scroll-behavior: smooth;
+  /* iOS 오버스크롤(rubber-band) 시 흰색 기본값 대신 앱 배경색 노출 */
+  background: #0f0f1a;
 }
 
 body {
