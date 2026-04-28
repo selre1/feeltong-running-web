@@ -1,5 +1,5 @@
 .AdaptiveCenter {
   position: relative;
-  width: calc(min(430px, 100%) - 40px);
+  width: calc(min(var(--content-max-width), 100%) - calc(var(--content-h-padding) * 2));
   margin: auto;
 }

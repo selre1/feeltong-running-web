@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdaptiveDiv from '../../components/AdaptiveDiv'
 import AdaptiveCard from '../../components/AdaptiveDiv/AdaptiveCard'
@@ -10,11 +11,22 @@ import './index.css'
 
 export default function MyPage() {
   const navigate = useNavigate()
-  const { isAuthenticated, user, logout } = useAuth()
+  const { isAuthenticated, user, logout, deleteAccount, loading } = useAuth()
   const { records } = useRunning()
+  const [confirmWithdraw, setConfirmWithdraw] = useState(false)
   const email = user?.email ?? ''
   const nickname = user?.nickname ?? ''
   const recordCount = records.length
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteAccount()
+      navigate('/auth')
+    } catch {
+      // 에러는 AuthContext error 상태로 처리됨
+    }
+  }
+
   return (
     <AdaptiveDiv className="MyPage" type="center">
       <div className="MyPage__header">
@@ -42,6 +54,45 @@ export default function MyPage() {
             </div>
           </AdaptiveCard>
 
+          {/* 회원탈퇴 */}
+          <div className="MyPage__withdraw">
+            {confirmWithdraw ? (
+              <div className="MyPage__withdrawConfirm">
+                <p className="MyPage__withdrawWarning">
+                  탈퇴하면 모든 러닝 기록과 계정 정보가 삭제됩니다.<br />
+                  정말 탈퇴하시겠어요?
+                </p>
+                <div className="MyPage__withdrawActions">
+                  <button
+                    className="MyPage__withdrawCancel"
+                    disabled={loading}
+                    onClick={() => setConfirmWithdraw(false)}
+                    type="button"
+                  >
+                    취소
+                  </button>
+                  <button
+                    className="MyPage__withdrawConfirmBtn"
+                    disabled={loading}
+                    onClick={handleDeleteAccount}
+                    type="button"
+                  >
+                    {loading ? '처리 중...' : '탈퇴하기'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                className="MyPage__withdrawBtn"
+                onClick={() => setConfirmWithdraw(true)}
+                type="button"
+              >
+                회원탈퇴
+              </button>
+            )}
+          </div>
+
+          {/* 설정 섹션 — 추후 오픈 예정
           <div className="MyPage__settings">
             {myCopy.settings.map(([title, description]) => (
               <AdaptiveCard className="MyPage__setting" key={title}>
@@ -50,6 +101,7 @@ export default function MyPage() {
               </AdaptiveCard>
             ))}
           </div>
+          */}
         </>
       )}
     </AdaptiveDiv>

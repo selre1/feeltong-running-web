@@ -71,6 +71,11 @@
   --ui-page-gap: 12px;
   --ui-page-padding-top: 24px;
   --ui-card-padding: 16px;
+  /* 네비게이션 높이 — Navigation.css / index.css / Running/index.css 공용 */
+  --nav-inner-height: 74px;
+  /* 콘텐츠 컬럼 최대 너비 */
+  --content-max-width: 430px;
+  --content-h-padding: 20px;
   background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 62%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -105,6 +110,22 @@ body {
 
 #root {
   position: relative;
+}
+
+/* 태블릿 (600px+): 텍스트·간격·네비게이션 스케일 업 */
+@media (min-width: 600px) {
+  :root {
+    --ui-text-title: 1.2rem;
+    --ui-text-body: 1.02rem;
+    --ui-text-caption: 0.84rem;
+    --ui-text-metric: 1.75rem;
+    --ui-page-gap: 16px;
+    --ui-page-padding-top: 28px;
+    --ui-card-padding: 20px;
+    --nav-inner-height: 80px;
+    --content-max-width: 640px;
+    --content-h-padding: 24px;
+  }
 }
 
 body::-webkit-scrollbar,

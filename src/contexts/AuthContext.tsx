@@ -3,6 +3,7 @@ import { useAuthSession } from '../hooks/useAuthSession'
 import type { SessionUser } from '../hooks/useAuthSession'
 
 interface AuthContextValue {
+  deleteAccount: () => Promise<void>
   error: string
   initializing: boolean
   isAuthenticated: boolean
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider
       value={{
+        deleteAccount: auth.deleteAccount,
         error: auth.error,
         initializing: auth.initializing,
         isAuthenticated: Boolean(auth.user),

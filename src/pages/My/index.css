@@ -115,6 +115,88 @@
   line-height: 1.5;
 }
 
+/* ===== 회원탈퇴 ===== */
+
+.MyPage__withdraw {
+  padding-top: 4px;
+  text-align: center;
+}
+
+.MyPage__withdrawBtn {
+  background: transparent;
+  border: none;
+  color: var(--ui-color-text-tertiary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 8px 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 150ms ease;
+}
+
+.MyPage__withdrawBtn:hover,
+.MyPage__withdrawBtn:active {
+  color: var(--ui-color-danger);
+}
+
+.MyPage__withdrawConfirm {
+  border: 1px solid rgba(255, 100, 100, 0.2);
+  border-radius: var(--ui-radius-card);
+  background: rgba(255, 100, 100, 0.06);
+  padding: 18px 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.MyPage__withdrawWarning {
+  color: var(--ui-color-text-secondary);
+  font-size: var(--ui-text-body);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.MyPage__withdrawActions {
+  display: flex;
+  gap: 10px;
+}
+
+.MyPage__withdrawCancel {
+  flex: 1;
+  height: 46px;
+  border-radius: var(--ui-radius-button);
+  border: var(--ui-border-soft);
+  background: var(--ui-surface-control);
+  color: var(--ui-color-text-primary);
+  font-size: var(--ui-text-body);
+  font-weight: 700;
+  transition: background 120ms ease;
+}
+
+.MyPage__withdrawCancel:hover {
+  background: var(--ui-surface-hover);
+}
+
+.MyPage__withdrawConfirmBtn {
+  flex: 1;
+  height: 46px;
+  border-radius: var(--ui-radius-button);
+  border: none;
+  background: rgba(255, 80, 80, 0.18);
+  color: var(--ui-color-danger);
+  font-size: var(--ui-text-body);
+  font-weight: 700;
+  transition: background 120ms ease;
+}
+
+.MyPage__withdrawConfirmBtn:hover {
+  background: rgba(255, 80, 80, 0.28);
+}
+
+.MyPage__withdrawConfirmBtn:disabled,
+.MyPage__withdrawCancel:disabled {
+  opacity: 0.5;
+}
+
 @media (max-width: 420px) {
   .MyPage__profile {
     grid-template-columns: 1fr;

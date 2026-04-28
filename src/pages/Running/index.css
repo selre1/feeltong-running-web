@@ -16,7 +16,7 @@
 
 .RunningPage--ready,
 .RunningPage--summary {
-  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
+  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - var(--nav-inner-height) - 14px);
 }
 
 .RunningPage--ready {
@@ -328,7 +328,7 @@
 
   .RunningPage--ready,
   .RunningPage--summary {
-    height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 102px);
+    height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - var(--nav-inner-height) - 14px);
   }
 
   .RunningPage__heroStat {
