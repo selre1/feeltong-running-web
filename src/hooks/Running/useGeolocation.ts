@@ -53,6 +53,7 @@ const makeGeolocationPositionError = (detail: FlutterPositionErrorDetail): Geolo
 
 export default function useGeolocation({ onError, onPosition, onPositionBatch }: UseGeolocationOptions) {
   const watchIdRef = useRef<number | null>(null)
+  const isWatchingRef = useRef(false)
   const isFlutter = isFlutterWebView()
 
   const isSupported = useCallback(() => {
@@ -79,6 +80,8 @@ export default function useGeolocation({ onError, onPosition, onPositionBatch }:
 
   const startWatch = useCallback(() => {
     if (isFlutter) {
+      if (isWatchingRef.current) return true  // 이미 시작됨 — 중복 gps_start 방지
+      isWatchingRef.current = true
       window.flutter_inappwebview!.callHandler('gps_start')
       return true
     }
@@ -96,6 +99,8 @@ export default function useGeolocation({ onError, onPosition, onPositionBatch }:
 
   const stopWatch = useCallback(() => {
     if (isFlutter) {
+      if (!isWatchingRef.current) return  // 이미 중단됨 — 중복 gps_stop 방지
+      isWatchingRef.current = false
       window.flutter_inappwebview!.callHandler('gps_stop')
       return
     }
