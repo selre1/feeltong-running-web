@@ -110,7 +110,22 @@ export const useAuthSession = () => {
     }
   }, [apiClient])
 
+  const deleteAccount = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try {
+      await apiClient.delete('/auth/withdraw')
+      setUser(null)
+    } catch (caughtError) {
+      setError(getErrorMessage(caughtError))
+      throw caughtError
+    } finally {
+      setLoading(false)
+    }
+  }, [apiClient])
+
   return {
+    deleteAccount,
     error,
     initializing,
     loading,
