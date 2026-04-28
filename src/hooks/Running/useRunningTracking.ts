@@ -4,6 +4,8 @@ import { getAveragePaceSeconds, getDistanceMeters, getRouteDistanceMeters, toGeo
 import useGeolocation from './useGeolocation'
 import useGpsPermission from './useGpsPermission'
 
+const isFlutterWebView = () => typeof window !== 'undefined' && !!window.flutter_inappwebview
+
 const DRAFT_STORAGE_KEY = 'feeltong-running-draft'
 const ROUTE_SAMPLE_INTERVAL_MS = 5_000
 const POSITION_STATE_INTERVAL_MS = 3_000
@@ -70,7 +72,8 @@ export default function useRunningTracking() {
   const [draft, setDraft] = useState<RunDraft>(() => parseStoredJson(DRAFT_STORAGE_KEY, createEmptyDraft()))
   const [records, setRecords] = useState<RunRecord[]>([])
   const [now, setNow] = useState(() => Date.now())
-  const [notice, setNotice] = useState('GPS 권한 상태를 확인하는 중입니다.')
+  const isFlutter = isFlutterWebView()
+  const [notice, setNotice] = useState(isFlutter ? 'GPS 연결 중...' : 'GPS 권한 상태를 확인하는 중입니다.')
   const { permissionState, setPermissionState } = useGpsPermission()
   const lastPositionUpdateRef = useRef(0)
 
@@ -152,16 +155,48 @@ export default function useRunningTracking() {
     setNotice('GPS 수신이 불안정합니다. 네트워크/기기 상태를 확인해 주세요.')
   })
 
+  // 백그라운드 복귀 시 Flutter에서 누락 구간 좌표를 일괄 전송
+  const handlePositionBatch = useEffectEvent((positions: GeolocationPosition[]) => {
+    if (draft.status !== 'running') return
+
+    setPermissionState('granted')
+
+    setDraft((previous) => {
+      if (previous.status !== 'running') return previous
+
+      let route = previous.route
+      let currentPosition = previous.currentPosition
+
+      for (const position of positions) {
+        const point = toGeoPoint(position)
+        if (point.accuracy != null && point.accuracy > MAX_ACCURACY_METERS) continue
+        if (shouldAppendPoint(route, point)) {
+          route = [...route, point]
+        }
+        currentPosition = point
+      }
+
+      if (route === previous.route && currentPosition === previous.currentPosition) {
+        return previous
+      }
+
+      return { ...previous, route, currentPosition }
+    })
+
+    setNotice('GPS 수신 중')
+  })
+
   const { requestCurrentPosition, startWatch, stopWatch } = useGeolocation({
     onError: handleGeolocationError,
     onPosition: handlePosition,
+    onPositionBatch: handlePositionBatch,
   })
 
   useEffect(() => {
-    if (permissionState === 'granted' && draft.status === 'idle') {
+    if (permissionState === 'granted' && draft.status === 'idle' && draft.currentPosition === null) {
       requestCurrentPosition()
     }
-  }, [draft.status, permissionState, requestCurrentPosition])
+  }, [draft.status, permissionState, requestCurrentPosition, draft.currentPosition])
 
   useEffect(() => {
     // 위치를 이미 받았으면 permission API 상태와 무관하게 GPS 정상 작동 중
@@ -190,23 +225,32 @@ export default function useRunningTracking() {
       return
     }
 
+    // Flutter: 네이티브가 GPS를 관리하므로 permissionState는 항상 'unknown'에서 시작
+    if (isFlutter) {
+      setNotice('GPS 연결 중...')
+      return
+    }
+
     // 'unknown' — permissions API 미지원(iOS Safari) 또는 아직 확인 중
     setNotice('GPS 권한 상태를 확인하는 중입니다.')
   }, [draft.status, draft.currentPosition, permissionState])
 
+  // idle 상태: GPS 권한 확인 및 현재 위치 1회 요청
+  // permissionState를 별도 effect로 분리해 running 중 재시작 방지
   useEffect(() => {
-    if (draft.status === 'idle') {
-      if (!requestCurrentPosition()) {
-        setPermissionState('unsupported')
-        setNotice('이 브라우저는 위치 기능을 지원하지 않습니다.')
-      }
-      return
-    }
+    if (draft.status !== 'idle') return
+    if (permissionState === 'denied') return
 
-    if (draft.status !== 'running') {
-      stopWatch()
-      return
+    if (!requestCurrentPosition()) {
+      setPermissionState('unsupported')
+      setNotice('이 브라우저는 위치 기능을 지원하지 않습니다.')
     }
+  }, [draft.status, permissionState, requestCurrentPosition, setPermissionState])
+
+  // running 상태: GPS 연속 추적 시작/중단
+  // permissionState 미포함 — 권한 변경 시 watch 재시작 방지
+  useEffect(() => {
+    if (draft.status !== 'running') return
 
     if (!requestCurrentPosition()) {
       setPermissionState('unsupported')
