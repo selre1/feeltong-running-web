@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { Map as LeafletMap } from 'leaflet'
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import type { GeoPoint } from '../../types/run'
@@ -23,24 +23,22 @@ export default function RouteMap({
   showCurrentMarker = true,
 }: RouteMapProps) {
   const [map, setMap] = useState<LeafletMap | null>(null)
+  const [autoFollow, setAutoFollow] = useState(true)
+
   const center = route.at(-1) ?? currentPosition
-  const sampledRoute = route
   const mapCenter = useMemo(() => toLatLng(center), [center])
   const runnerIcon = useMemo(() => createRunnerIcon(), [])
 
+  const handleUserInteract = useCallback(() => {
+    setAutoFollow(false)
+  }, [])
+
   const moveToCurrentPosition = () => {
-    if (!map) {
-      return
-    }
+    if (!map) return
 
     const latestPoint = route.at(-1) ?? currentPosition
-
-    if (hasLivePosition) {
-      map.flyTo(toLatLng(latestPoint), Math.max(map.getZoom(), 16), { animate: true, duration: 0.35 })
-      return
-    }
-
-    map.locate({ enableHighAccuracy: true, setView: true, maxZoom: 16 })
+    map.flyTo(toLatLng(latestPoint), Math.max(map.getZoom(), 16), { animate: true, duration: 0.35 })
+    setAutoFollow(true)
   }
 
   return (
@@ -57,11 +55,11 @@ export default function RouteMap({
           zoom={DEFAULT_ZOOM}
           zoomControl
         >
-          <RecenterMap center={mapCenter} />
+          <RecenterMap center={mapCenter} follow={autoFollow} onUserInteract={handleUserInteract} />
 
           <TileLayer subdomains={TILE_SUBDOMAINS} url={TILE_URL} />
 
-          <RoutePolylineLayer points={sampledRoute} />
+          <RoutePolylineLayer points={route} />
 
           {hasLivePosition && showCurrentMarker ? <Marker icon={runnerIcon} position={toLatLng(currentPosition)} /> : null}
         </MapContainer>
@@ -78,7 +76,7 @@ export default function RouteMap({
         {!hasLivePosition ? (
           <div className="RouteMap__placeholder">
             <strong>GPS</strong>
-            <span>test</span>
+            <span>수신 대기 중</span>
           </div>
         ) : null}
       </div>

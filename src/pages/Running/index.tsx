@@ -65,7 +65,7 @@ export default function RunningPage() {
           currentPosition={mapCurrentPosition}
           hasLivePosition={Boolean(mapRoute.at(-1) ?? draft.currentPosition)}
           route={mapRoute}
-          showCurrentMarker={runningView === 'ready'}
+          showCurrentMarker={runningView !== 'summary'}
         />
         {!isActiveView && !isSummaryView ? <p className="RunningPage__notice">{notice}</p> : null}
 

@@ -9,7 +9,8 @@ const isFlutterWebView = () => typeof window !== 'undefined' && !!window.flutter
 const DRAFT_STORAGE_KEY = 'feeltong-running-draft'
 const ROUTE_SAMPLE_INTERVAL_MS = 5_000
 const POSITION_STATE_INTERVAL_MS = 3_000
-const MAX_ACCURACY_METERS = 30   // 오차 반경 30m 초과 시 무시
+const MAX_ACCURACY_METERS = 30        // 경로 포인트 추가 시 오차 반경 상한
+const MAX_MARKER_ACCURACY_METERS = 100 // 현재 위치 마커 표시 시 오차 반경 상한 (웹 브라우저는 GPS 정확도가 낮음)
 const MAX_SPEED_MS = 8           // 8m/s ≈ 29km/h 초과 시 GPS 튐으로 판단
 const MIN_DISTANCE_METERS = 8    // 8m 미만 이동은 GPS 드리프트로 간주, 경로에 추가 안 함
 
@@ -117,8 +118,8 @@ export default function useRunningTracking() {
 
     setPermissionState('granted')
 
-    // 정확도가 너무 낮은 위치는 마커 및 경로 모두 무시
-    if (point.accuracy != null && point.accuracy > MAX_ACCURACY_METERS) return
+    // 정확도가 너무 낮으면 마커 업데이트 자체를 건너뜀 (경로 필터는 shouldAppendPoint에서 별도 적용)
+    if (point.accuracy != null && point.accuracy > MAX_MARKER_ACCURACY_METERS) return
 
     setDraft((previous) => {
       const route =
